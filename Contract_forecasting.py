@@ -12,7 +12,7 @@ def crear_placeholder():
 
 @st.cache_data
 def carga_historicos():
-    datosHis = pd.read_csv("Contratos_antes_SICEP.csv", sep=',', header=0, low_memory=False)
+    datosHis = pd.read_csv("data/Contratos_antes_SICEP.csv", sep=',', header=0, low_memory=False)
     datosHis = datosHis.rename(columns={'BASE': 'PERIODO_ADJ'})
     datosHis.drop(['Unnamed: 0.1','Unnamed: 0'],axis=1, inplace=True)
     datosHis = datosHis[['AGENTE_COMPRADOR', 'AGENTE_VENDEDOR', 'PERIODO_ADJ','CONTRATO', 'FECHA', 'KW', 'PRECIO']]
