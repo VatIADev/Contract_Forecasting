@@ -12,7 +12,7 @@ def crear_placeholder():
 
 @st.cache_data
 def carga_historicos():
-    datosHis = pd.read_csv("data/Contratos_antes_SICEP.csv", sep=',', header=0, low_memory=False)
+    datosHis = pd.read_csv("Contratos_antes_SICEP.csv", sep=',', header=0, low_memory=False)
     datosHis = datosHis.rename(columns={'BASE': 'PERIODO_ADJ'})
     datosHis.drop(['Unnamed: 0.1','Unnamed: 0'],axis=1, inplace=True)
     datosHis = datosHis[['AGENTE_COMPRADOR', 'AGENTE_VENDEDOR', 'PERIODO_ADJ','CONTRATO', 'FECHA', 'KW', 'PRECIO']]
@@ -29,21 +29,18 @@ def carga_archivos(archivo, nombre):
         datos = datos[datos['ADJUDICACION'] != 'ANTES DE SICEP']
         datos['CONTRATO'] = datos['CONTRATO'].apply(lambda x: str(int(float(x))) if x.endswith('.0') and x.replace('.0', '').isdigit() else x)
         missing_columns = [col for col in required_columns if col not in datos.columns]
-        if "kw" in nombre.lower(): 
-            if missing_columns:
-                alerta_kw.warning(f":no_entry: El archivo cargado no es correcto. Faltan las siguientes columnas: {', '.join(missing_columns)}")
-                return pd.DataFrame()  # Devuelve un DataFrame vacío si hay columnas faltantes
-            else:
+        if not missing_columns:
+            if "kw" in nombre.lower(): 
                 datos.drop(['TIPO','CODIGO_CONVOCATORIA','CONCEPTO','CODIGO_COMERCIALIZADOR','ADJUDICACION_AÑO'],axis=1, inplace=True)
                 alerta_kw.success(":heavy_check_mark: Base de datos de energía cargada correctamente")
-        if "precios" in nombre.lower():
-            if missing_columns:
-                alerta_precios.warning(f":no_entry: El archivo cargado no es correcto. Faltan las siguientes columnas: {', '.join(missing_columns)}")
-                return pd.DataFrame()  # Devuelve un DataFrame vacío si hay columnas faltantes
-            else:
+            if "precios" in nombre.lower():
                 datos.drop(['TIPO','IPP_BASE','PERIODO_BASE','CODIGO_CONVOCATORIA',
                         'CODIGO_COMERCIALIZADOR','CONCEPTO'],axis=1, inplace=True)
                 alerta_precios.success(":heavy_check_mark: Base de datos de precio cargada correctamente")
+        else:
+            alerta_precios.warning(f":no_entry: El archivo cargado no es correcto. Faltan las siguientes columnas: {', '.join(missing_columns)}")
+            return pd.DataFrame()
+            
     else:
         return pd.DataFrame()
     return datos
@@ -145,13 +142,20 @@ def main():
             contratos = preparar_BD_IA(BD_prev)
             st.session_state['Contratos'] = contratos
         contratos_f2 = st.session_state['Contratos']
-        modelo, t_c, std = entrenar(contratos_f2,0.9)
         st.markdown('<br>', unsafe_allow_html=True)
         contenedor = st.sidebar.container(border=True)
         contenedor.write('**Parámetros del Contrato**') 
         plazo_ejec = contenedor.slider(':calendar: Plazo de ejecución (Años)', 0, 15, 15)
         duracion = contenedor.slider(':calendar: Duración (Años)', 0, 15, 15)
         energia = contenedor.number_input(":zap: Energía a contratar (GWh)",key='precio_input', min_value=0.0000,step=0.0001,format="%.4f")
+        alpha_lit = contenedor.selectbox('Selecciona', ['Alto','Medio','Bajo'])
+        if alpha_lit == 'Alto':
+            alpha = 0.9
+        elif alpha_lit == 'Medio':
+            alpha = 0.7
+        elif alpha_lit == 'Bajo':
+            alpha = 0.5
+        modelo, t_c, std = entrenar(contratos_f2,alpha)
         if energia > 0:
             pron_up, pron_down = pronostico(modelo,pd.DataFrame([[energia,plazo_ejec,duracion]],columns=['GW_TOTAL','PLAZO','DURACION']),t_c,std)
         else:
