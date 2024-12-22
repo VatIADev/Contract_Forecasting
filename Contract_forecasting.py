@@ -148,7 +148,7 @@ def main():
         plazo_ejec = contenedor.slider(':calendar: Plazo de ejecución (Años)', 0, 15, 15)
         duracion = contenedor.slider(':calendar: Duración (Años)', 0, 15, 15)
         energia = contenedor.number_input(":zap: Energía a contratar (GWh)",key='precio_input', min_value=0.0000,step=0.0001,format="%.4f")
-        alpha_lit = contenedor.selectbox('Selecciona', ['Alto','Medio','Bajo'])
+        alpha_lit = contenedor.selectbox('Rango de Precisión', ['Alto','Medio','Bajo'])
         if alpha_lit == 'Alto':
             alpha = 0.9
         elif alpha_lit == 'Medio':
