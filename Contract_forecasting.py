@@ -152,7 +152,7 @@ def estilo():
             }
             
             [data-testid="stSidebar"] img {
-                margin-top: -70px; !important /* Ajustar según el espacio requerido */
+                margin-top: -70px  !important; /* Ajustar según el espacio requerido */
                 margin-left: 0px;
             }
             .css-1v0mbdj {
@@ -163,12 +163,6 @@ def estilo():
                 background-color:#396425ff !important;
                 padding: 1.5em;
                 border-radius: 20px;
-            }
-    
-            div[data-testid="stMetricValue"]{
-                font-size:2.8em;
-                color: #FFFFFF;
-                font-family:'Prompt' !important;
             }
     
             h3, label[data-testid="stMetricLabel"] p{
