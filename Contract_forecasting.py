@@ -174,7 +174,7 @@ def estilo():
 
             .st-key-cont-variables{
                 background-color:#396425ff !important;
-                border: 6px solid #ffffff;
+                height: 100%;
             }
 
       </style>
