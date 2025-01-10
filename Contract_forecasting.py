@@ -149,10 +149,9 @@ def estilo():
                 border-radius: 8px;         /* Esquinas redondeadas */
                 padding: 10px;              /* Añadir algo de padding */
                 color: white;               /* Cambiar color del texto a blanco */
-                font-size:2.8em !important;
+                font-family: 'Prompt', sans-serif !important;
             }
 
-            
             [data-testid="stSidebar"] img {
                 margin-top: -70px  !important; /* Ajustar según el espacio requerido */
                 margin-left: 0px;
@@ -173,6 +172,10 @@ def estilo():
     
             div[data-testid="stMetricDelta"] {
                 font-size: 1.3em;
+            }
+
+            div[data-testid="stMetricValue"]{
+                font-size:2.8em;
             }
 
       </style>
