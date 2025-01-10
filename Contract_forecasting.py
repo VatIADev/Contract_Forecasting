@@ -174,7 +174,7 @@ def main():
         }
 
         h3, label[data-testid="stMetricLabel"] p{
-            font-size: 1.75em!important;
+            font-size: 1.3em !important;
         }
 
         div[data-testid="stMetricDelta"] {
