@@ -228,7 +228,7 @@ def main():
         else:
             pron_up, pron_down = round(0.00,2), round(0.00,2)
 
-        with st.container(key=cont-result):
+        with st.container(key='cont-result'):
             st.write('📊 **Información de Pronóstico de Contrato:**')
             col3, col4 = st.columns([3,3])
             col4.metric(':arrow_up::heavy_dollar_sign: Precio máximo de firma (COP/kWh)', round(pron_up,2))
