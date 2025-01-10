@@ -143,6 +143,13 @@ def estilo():
                 align-items: flex-start;
                 flex-direction: column;
             }
+
+            div[data-testid="stMetric"] {
+                background-color: #000000;  /* Color de fondo verde */
+                border-radius: 8px;         /* Esquinas redondeadas */
+                padding: 10px;              /* Añadir algo de padding */
+                color: white;               /* Cambiar color del texto a blanco */
+            }
             
             [data-testid="stSidebar"] img {
                 margin-top: -70px;  /* Ajustar según el espacio requerido */
