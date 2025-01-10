@@ -154,12 +154,18 @@ def main():
         .css-1v0mbdj {
             margin-top: 0px !important;
         }
-       .css-1v0mbdj.e1tzin5v3 {
+        .css-1v0mbdj.e1tzin5v3 {
             color: #ffffff !important; /* Color verde para st.sidebar.success */
         }
     
         .css-1v0mbdj.e1tzin5v4 {
             color: #ff9800 !important; /* Color naranja para st.sidebar.warning */
+        }
+
+        .st-cont-load{
+            background-color: !important;
+            padding: 20px;
+            border-radius: 20px;
         }
         
     </style>
@@ -170,22 +176,8 @@ def main():
     st.markdown('<br>', unsafe_allow_html=True)
     st.sidebar.write('**Notificaciones**')
     st.markdown('<br>', unsafe_allow_html=True)
-    st.markdown(
-    '''
-    <style>
-    .streamlit-expanderHeader {
-        background-color: white;
-        color: blue; # Adjust this for expander header color
-    }
-    .streamlit-expanderContent {
-        background-color: white;
-        color: blue; # Expander content color
-    }
-    </style>
-    ''',
-    unsafe_allow_html=True
-    )
-    with st.expander('📤 **Cargar históricos de contratos**',expanded=True):
+    
+    with st.container('📤 **Cargar históricos de contratos**',expanded=True,key='cont-load'):
         col1, col2 = st.columns(2)
         with col1:
             arch1 = st.file_uploader(':zap: Energía', type='csv', key='kw_up')
