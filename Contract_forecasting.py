@@ -155,7 +155,7 @@ def main():
             margin-top: 0px !important;
         }
         .css-1v0mbdj.e1tzin5v3 {
-            color: #28a745 !important; /* Color verde para st.success */
+            color: #FFFFFF !important; /* Color verde para st.success */
         }
     
         .css-1v0mbdj.e1tzin5v4 {
