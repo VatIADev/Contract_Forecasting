@@ -169,7 +169,7 @@ def main():
         }
 
         .st-key-precio_input{
-            text-color:#396425ff !important;
+            color:#000000 !important;
         }
         
     </style>
