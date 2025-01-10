@@ -151,6 +151,11 @@ def main():
             margin-top: -70px;  /* Ajustar según el espacio requerido */
             margin-left: 0px;
         }
+        
+        [data-testid="stDivider"] div:first-child {
+            margin-top: -70px;  /* Ajustar según el espacio requerido */
+            margin-left: 0px;
+        }
     </style>
     """, unsafe_allow_html=True
     )
