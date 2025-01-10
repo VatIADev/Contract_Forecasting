@@ -174,8 +174,6 @@ def estilo():
 
             .st-key-cont-variables{
                 background-color:#396425ff !important;
-                padding: 0.5em;
-                border-radius: 15px;
             }
 
       </style>
@@ -226,12 +224,12 @@ def main():
             st.session_state['Contratos'] = contratos
         contratos_f2 = st.session_state['Contratos']
         st.markdown('<br>', unsafe_allow_html=True)
-        contenedor = st.sidebar.container(key='cont-variables')
+        contenedor = st.sidebar.container(key='cont-variables', border=True)
         contenedor.write('**Parámetros del Contrato**')
         plazo_ejec = contenedor.slider(':calendar: Plazo de ejecución (Años)', 0, 15, 15)
         duracion = contenedor.slider(':calendar: Duración (Años)', 0, 15, 15)
         energia = contenedor.number_input(":zap: Energía a contratar (GWh)",key='precio_input', min_value=0.0000,step=0.0001,format="%.4f")
-        alpha_lit = contenedor.selectbox('Rango de Precisión', ['Alto','Medio','Bajo'],key='alfa')
+        alpha_lit = contenedor.selectbox('Rango de Precisión', ['Alto','Medio','Bajo'],key='alfa',)
         if alpha_lit == 'Alto':
             alpha = 0.9
         elif alpha_lit == 'Medio':
@@ -246,7 +244,7 @@ def main():
             pron_up, pron_down = round(0.00,2), round(0.00,2)
 
         with st.container(key='cont-result'):
-            st.write('📊 **Información de Pronóstico de Contrato:**')
+            st.write('📊 **Información: Pronóstico de Contrato**')
             col3, col4 = st.columns([3,3])
             col4.metric(':arrow_up::heavy_dollar_sign: Precio máximo de firma (COP/kWh)', round(pron_up,2))
             col3.metric(':arrow_down::heavy_dollar_sign: Precio mínimo de firma (COP/kWh)', round(pron_down,2))
