@@ -171,13 +171,7 @@ def estilo():
             div[data-testid="stMetricDelta"] {
                 font-size: 1.3em;
             }
-
-            div[data-testid="stVerticalBlock"][key="cont-variable"] {
-                border: 30px solid #396425; /* Borde de 2px y color verde */
-                border-radius: 30px; /* Esquinas redondeadas */
-                padding: 0px; /* Sin padding */
-            }
-
+            
       </style>
       """, unsafe_allow_html=True)
     
