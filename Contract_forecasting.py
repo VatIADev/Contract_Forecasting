@@ -137,6 +137,8 @@ def main():
     st.set_page_config(page_title="Pronóstico Contratos Vatia",page_icon="images/icon.png",layout="wide")
     st.markdown(font, unsafe_allow_html=True)
     est_pron = False
+    st.sidebar.image("images/LogoVatia.png",caption="",use_container_width=True)
+    st.sidebar.divider()
     st.sidebar.header("Pronósticos Contratos")
     st.markdown('<br>', unsafe_allow_html=True)
     st.sidebar.write('**Notificaciones**')
