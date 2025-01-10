@@ -154,7 +154,7 @@ def main():
     </style>
     """, unsafe_allow_html=True
     )
-    st.sidebar.image("images/LogoVatia.png",caption="")
+    st.sidebar.image("images/LogoVatia.png",caption="",use_column_width=True)
     st.sidebar.divider()
     st.sidebar.header("Pronósticos Contratos")
     st.markdown('<br>', unsafe_allow_html=True)
