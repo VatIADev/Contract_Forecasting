@@ -123,8 +123,9 @@ def graficar(resultados):
                       showlegend=True, margin=dict(l=50, r=50, t=30, b=50))
     return fig
 
-def main():
-    font = """
+def estilo():
+     st.markdown(
+     """
       <style>
           @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap');
 
@@ -133,9 +134,13 @@ def main():
           }
 
       </style>
-    """
+      """, unsafe_allow_html=True)
+    
+
+
+def main():
     st.set_page_config(page_title="Pronóstico Contratos Vatia",page_icon="images/icon.png",layout="wide")
-    st.markdown(font, unsafe_allow_html=True)
+    estilo()
     est_pron = False
     st.sidebar.markdown(
     """
