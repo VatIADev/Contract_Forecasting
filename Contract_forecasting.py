@@ -161,7 +161,8 @@ def estilo():
             div[data-testid="stMetricValue"]{
                 font-size:2.8em;
                 color: #FFFFFF;
-                font-family:'Prompt':
+                font-family:'Prompt';
+                background-color:'#000000';
             }
     
             h3, label[data-testid="stMetricLabel"] p{
