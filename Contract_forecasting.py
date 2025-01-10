@@ -151,14 +151,11 @@ def main():
             margin-top: -70px;  /* Ajustar según el espacio requerido */
             margin-left: 0px;
         }
-        
-        [data-testid="stDivider"] div:first-child {
-            margin-top: -70px;  /* Ajustar según el espacio requerido */
-            margin-left: 0px;
+        .css-1v0mbdj {
+            margin-top: 0px !important;
         }
     </style>
-    """, unsafe_allow_html=True
-    )
+    """, unsafe_allow_html=True)
     st.sidebar.image("images/LogoVatia.png",caption="")
     st.sidebar.divider()
     st.sidebar.header("Pronósticos Contratos")
