@@ -172,7 +172,7 @@ def estilo():
                 font-size: 1.3em;
             }
 
-            .st-key-cont-variables div:first-child{
+            .st-key-cont-variables{
                 background-color:#396425ff !important;
             }
 
