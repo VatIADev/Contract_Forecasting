@@ -161,6 +161,15 @@ def main():
         .css-1v0mbdj.e1tzin5v4 {
             color: #ff9800 !important; /* Color naranja para st.sidebar.warning */
         }
+        .streamlit-expanderHeader {
+            border: 2px solid #FF5733 !important;  /* Color del borde */
+            border-radius: 5px;  /* Bordes redondeados */
+            padding: 5px;  /* Espaciado interno */
+        }
+        .streamlit-expanderContent {
+            border-left: 5px solid #FF5733 !important;  /* Borde izquierdo */
+            border-right: 5px solid #FF5733 !important; /* Borde derecho */
+        }
     </style>
     """, unsafe_allow_html=True)
     st.sidebar.image("images/LogoVatia.png",caption="")
