@@ -172,6 +172,12 @@ def estilo():
                 font-size: 1.3em;
             }
 
+            .st-key-cont-variables{
+                background-color:#396425ff !important;
+                padding: 1.5em;
+                border-radius: 20px;
+            }
+
       </style>
       """, unsafe_allow_html=True)
     
@@ -220,7 +226,7 @@ def main():
             st.session_state['Contratos'] = contratos
         contratos_f2 = st.session_state['Contratos']
         st.markdown('<br>', unsafe_allow_html=True)
-        contenedor = st.sidebar.container(border=True)
+        contenedor = st.sidebar.container(key='cont-variables')
         contenedor.write('**Parámetros del Contrato**')
         plazo_ejec = contenedor.slider(':calendar: Plazo de ejecución (Años)', 0, 15, 15)
         duracion = contenedor.slider(':calendar: Duración (Años)', 0, 15, 15)
