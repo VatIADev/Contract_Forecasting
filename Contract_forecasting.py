@@ -167,6 +167,19 @@ def main():
             padding: 1.5em;
             border-radius: 20px;
         }
+
+        div[data-testid="stMetricValue"]{
+            font-size:2.8em;
+            color: #000000;
+        }
+
+        h3, label[data-testid="stMetricLabel"] p{
+            font-size: 1.75em!important;
+        }
+
+        div[data-testid="stMetricDelta"] {
+            font-size: 1.3em;
+        }
         
     </style>
     """, unsafe_allow_html=True)
