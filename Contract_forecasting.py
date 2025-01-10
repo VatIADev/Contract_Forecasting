@@ -154,6 +154,13 @@ def main():
         .css-1v0mbdj {
             margin-top: 0px !important;
         }
+        .css-1v0mbdj.e1tzin5v3 {
+            color: #28a745 !important; /* Color verde para st.success */
+        }
+    
+        .css-1v0mbdj.e1tzin5v4 {
+            color: #ff9800 !important; /* Color naranja para st.warning */
+        }
     </style>
     """, unsafe_allow_html=True)
     st.sidebar.image("images/LogoVatia.png",caption="")
