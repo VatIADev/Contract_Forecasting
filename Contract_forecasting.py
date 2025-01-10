@@ -172,10 +172,10 @@ def estilo():
                 font-size: 1.3em;
             }
 
-            .st-key-cont-variables{
-                background-color:#396425ff !important;
-                height: 100%;
-                width: 100%;
+            div[data-testid="stVerticalBlock"] {
+                border: 2px solid #396425; /* Borde de 2px y color personalizado */
+                border-radius: 8px; /* Esquinas redondeadas */
+                padding: 0px; /* Eliminar el padding */
             }
 
       </style>
