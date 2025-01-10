@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 import xgboost as xg
 import scipy.stats as stats
 from sklearn.metrics import root_mean_squared_error, mean_absolute_error, mean_absolute_percentage_error
+from datetime import datetime
 
 def crear_placeholder():
     placeholder = st.sidebar.empty()  # Crear un placeholder vacío
@@ -12,7 +13,7 @@ def crear_placeholder():
 
 @st.cache_data
 def carga_historicos():
-    datosHis = pd.read_csv("data/Contratos_antes_SICEP.csv", sep=',', header=0, low_memory=False)
+    datosHis = pd.read_csv("Contratos_antes_SICEP.csv", sep=',', header=0, low_memory=False)
     datosHis = datosHis.rename(columns={'BASE': 'PERIODO_ADJ'})
     datosHis.drop(['Unnamed: 0.1','Unnamed: 0'],axis=1, inplace=True)
     datosHis = datosHis[['AGENTE_COMPRADOR', 'AGENTE_VENDEDOR', 'PERIODO_ADJ','CONTRATO', 'FECHA', 'KW', 'PRECIO']]
@@ -30,7 +31,7 @@ def carga_archivos(archivo, nombre):
         datos['CONTRATO'] = datos['CONTRATO'].apply(lambda x: str(int(float(x))) if x.endswith('.0') and x.replace('.0', '').isdigit() else x)
         missing_columns = [col for col in required_columns if col not in datos.columns]
         if not missing_columns:
-            if "kw" in nombre.lower(): 
+            if "kw" in nombre.lower():
                 datos.drop(['TIPO','CODIGO_CONVOCATORIA','CONCEPTO','CODIGO_COMERCIALIZADOR','ADJUDICACION_AÑO'],axis=1, inplace=True)
                 alerta_kw.success(":heavy_check_mark: Base de datos de energía cargada correctamente")
             if "precios" in nombre.lower():
@@ -40,7 +41,7 @@ def carga_archivos(archivo, nombre):
         else:
             alerta_precios.warning(f":no_entry: El archivo cargado no es correcto. Faltan las siguientes columnas: {', '.join(missing_columns)}")
             return pd.DataFrame()
-            
+
     else:
         return pd.DataFrame()
     return datos
@@ -79,10 +80,10 @@ def entrenar(datos,alpha):
     X, y = datos[['GW_TOTAL','PLAZO','DURACION']], datos['PRECIO_CONTRATO']
     xgb_r = xg.XGBRegressor(objective ='reg:squarederror',tree_method="hist",
                         eval_metric=mean_absolute_percentage_error,n_estimators = 100,
-                        seed = 42, learning_rate=0.05) 
+                        seed = 42, learning_rate=0.05)
     xgb_r.fit(X, y)
-    pred_train = xgb_r.predict(X) 
-    residuos = pred_train - y.values 
+    pred_train = xgb_r.predict(X)
+    residuos = pred_train - y.values
     std_error = np.std(residuos, ddof=1)
     n = len(X)
     t_critical = stats.t.ppf(1 - alpha/2, df=n-1)
@@ -93,6 +94,34 @@ def pronostico(modelo,datos,t_crit,std):
     pred_test_low = pred_test[0] - t_crit * std
     pred_test_high = pred_test[0] + t_crit * std
     return pred_test_high, pred_test_low
+
+def totales(datos,modelo,t_c,std):
+    resultados = np.zeros((8, 3))
+    energia = 0.2
+    año_actual = datetime.now().year
+    for plazo in range(8):
+        fore_up, fore_down = pronostico(modelo,pd.DataFrame([[energia,plazo,1]],columns=['GW_TOTAL','PLAZO','DURACION']),t_c,std)
+        resultados[plazo, 0], resultados[plazo, 1], resultados[plazo, 2] = año_actual + plazo, fore_up, fore_down
+    return pd.DataFrame(resultados, columns=['ds', 'p_max', 'p_min'])
+
+def graficar(resultados):
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_max'], mode='lines+markers',
+                             line=dict(width=3, color='blue', dash='dash'), name='', showlegend=False))
+    fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_min'], mode='lines+markers',
+                             fill='tonexty', line=dict(width=3, color='blue', dash='dash'), name='Precio Contratación', fillcolor='rgba(173, 216, 230, 0.5)'))
+    fig.update_xaxes(showline=True, linewidth=2, linecolor='black', gridcolor='lightgray', mirror=False, tickfont_color='black',
+                     title_text='<b>Año</b>', titlefont_size=18, tickfont_size=16, title_font_color='black',)
+    fig.update_yaxes(showline=True, linewidth=2, linecolor='black', gridcolor='lightgray', mirror=False, tickfont_color='black',
+                     title_text='<b>Precio ($COP/kWh)</b>', titlefont_size=18, tickfont_size=16, title_font_color='black',
+                     tickformat='.2f')  # Límite inferior en Y establecido en 0
+    fig.update_traces(hovertemplate='Año:</b> %{x}<br><b>Precio Contrato:</b> %{y:.2f} GW-mes<extra></extra>')
+    fig.update_layout(title='', plot_bgcolor='rgba(0,0,0,0)', width=2100, height=450,
+                      font=dict(family="Prompt", color='black'),
+                      legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1,
+                                  font_size=16, font_color='black'),
+                      showlegend=True)
+    return fig
 
 def main():
     font = """
@@ -115,7 +144,7 @@ def main():
     with st.expander('📤 **Cargar históricos de contratos**',expanded=True):
         col1, col2 = st.columns(2)
         with col1:
-            arch1 = st.file_uploader(':zap: Energia', type='csv', key='kw_up')
+            arch1 = st.file_uploader(':zap: Energía', type='csv', key='kw_up')
             if arch1 is not None:
                 kw = carga_archivos(arch1, arch1.name)
             else:
@@ -144,7 +173,7 @@ def main():
         contratos_f2 = st.session_state['Contratos']
         st.markdown('<br>', unsafe_allow_html=True)
         contenedor = st.sidebar.container(border=True)
-        contenedor.write('**Parámetros del Contrato**') 
+        contenedor.write('**Parámetros del Contrato**')
         plazo_ejec = contenedor.slider(':calendar: Plazo de ejecución (Años)', 0, 15, 15)
         duracion = contenedor.slider(':calendar: Duración (Años)', 0, 15, 15)
         energia = contenedor.number_input(":zap: Energía a contratar (GWh)",key='precio_input', min_value=0.0000,step=0.0001,format="%.4f")
@@ -158,6 +187,7 @@ def main():
         modelo, t_c, std = entrenar(contratos_f2,alpha)
         if energia > 0:
             pron_up, pron_down = pronostico(modelo,pd.DataFrame([[energia,plazo_ejec,duracion]],columns=['GW_TOTAL','PLAZO','DURACION']),t_c,std)
+            res_graf = totales(contratos_f2,modelo,t_c,std)
         else:
             pron_up, pron_down = round(0.00,2), round(0.00,2)
 
@@ -165,6 +195,8 @@ def main():
             col3, col4 = st.columns([3,3])
             col4.metric(':arrow_up::heavy_dollar_sign: Precio máximo de firma (COP/kWh)', round(pron_up,2))
             col3.metric(':arrow_down::heavy_dollar_sign: Precio mínimo de firma (COP/kWh)', round(pron_down,2))
-
+            st.markdown('<br>', unsafe_allow_html=True)
+            if energia > 0:
+                st.plotly_chart(graficar(res_graf))
 if __name__ == "__main__":
     main()
