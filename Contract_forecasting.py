@@ -145,11 +145,12 @@ def estilo():
             }
 
             div[data-testid="stMetric"] {
-                background-color: #095a81;  /* Color de fondo verde */
+                background-color: #095a8100;  /* Color de fondo verde */
                 border-radius: 8px;         /* Esquinas redondeadas */
                 padding: 10px;              /* Añadir algo de padding */
                 color: white;               /* Cambiar color del texto a blanco */
             }
+
             
             [data-testid="stSidebar"] img {
                 margin-top: -70px  !important; /* Ajustar según el espacio requerido */
@@ -173,8 +174,9 @@ def estilo():
                 font-size: 1.3em;
             }
 
-            
-            
+            div[data-testid="stMetricValue"]{
+                font-size:2.8em;
+            }
       </style>
       """, unsafe_allow_html=True)
     
