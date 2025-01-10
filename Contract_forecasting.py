@@ -174,8 +174,8 @@ def estilo():
 
             .st-key-cont-variables{
                 background-color:#396425ff !important;
-                padding: 0.1em;
-                border-radius: 2px;
+                padding: 0.5em;
+                border-radius: 4px;
             }
 
       </style>
