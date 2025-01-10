@@ -169,7 +169,7 @@ def estilo():
                 font-size:2.8em;
                 color: #FFFFFF;
                 font-family:'Prompt';
-                background-color:'#000000';
+                background-color:'#095a81';
             }
     
             h3, label[data-testid="stMetricLabel"] p{
@@ -250,7 +250,7 @@ def main():
         with st.container(key='cont-result'):
             st.write('📊 **Información: Pronóstico de Contrato**')
             col3, col4 = st.columns([3,3])
-            col4.metric(':arrow_up::heavy_dollar_sign: Precio máximo de firma (COP/kWh)', round(pron_up,2),border=True)
+            col4.metric(':arrow_up::heavy_dollar_sign: Precio máximo de firma (COP/kWh)', round(pron_up,2))
             col3.metric(':arrow_down::heavy_dollar_sign: Precio mínimo de firma (COP/kWh)', round(pron_down,2))
             st.markdown('<br>', unsafe_allow_html=True)
             if energia > 0:
