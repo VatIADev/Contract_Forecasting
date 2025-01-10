@@ -1,2 +1,3 @@
 [theme]
-backgroundColor = '#FFFFFF'
+backgroundColor = '#FFFFFFFF'
+textColor = '#AEEA00FF'
