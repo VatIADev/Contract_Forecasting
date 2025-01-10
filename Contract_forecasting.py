@@ -139,7 +139,7 @@ def main():
     est_pron = False
     st.sidebar.markdown(
     """
-    <style>
+    <style type=text/css>
         [data-testid="stSidebar"] > div:first-child {
             display: flex;
             justify-content: flex-start;
