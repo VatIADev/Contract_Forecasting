@@ -151,15 +151,10 @@ def main():
             margin-top: -70px;  /* Ajustar según el espacio requerido */
             margin-left: 0px;
         }
-        
-        .sidebar-image img {
-            height: 100px; /* Ajusta la altura deseada */
-            width: auto;   /* Mantén las proporciones de la imagen */
-        }
     </style>
     """, unsafe_allow_html=True
     )
-    st.sidebar.markdown('<div class="sidebar-image"><img src="./images/LogoVatia.png" alt="Logo"></div>', unsafe_allow_html=True)
+    st.sidebar.image("images/LogoVatia.png",caption="")
     st.sidebar.divider()
     st.sidebar.header("Pronósticos Contratos")
     st.markdown('<br>', unsafe_allow_html=True)
