@@ -106,9 +106,9 @@ def totales(datos,modelo,t_c,std):
 
 def graficar(resultados):
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_max'], mode='lines+markers', marker=dict(size=15,color='blue', opacity=0.8),
+    fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_max'], mode='lines+markers', marker=dict(size=10,color='blue', opacity=0.8),
                              line=dict(width=3, color='blue', dash='dash'), name='', showlegend=False))
-    fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_min'], mode='lines+markers', marker=dict(size=15,color='blue', opacity=0.8),
+    fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_min'], mode='lines+markers', marker=dict(size=10,color='blue', opacity=0.8),
                              fill='tonexty', line=dict(width=3, color='blue', dash='dash'), name='Precio Contratos', fillcolor='rgba(173, 216, 230, 0.5)'))
     fig.update_xaxes(showline=True, linewidth=2, linecolor='black', gridcolor='lightgray', mirror=False, tickfont_color='black',
                      title_text='<b>Año</b>', titlefont_size=18, tickfont_size=16, title_font_color='black',)
