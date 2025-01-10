@@ -177,7 +177,8 @@ def main():
     st.sidebar.write('**Notificaciones**')
     st.markdown('<br>', unsafe_allow_html=True)
     
-    with st.container('📤 **Cargar históricos de contratos**',expanded=True,key='cont-load'):
+    with st.container(expanded=True,key='cont-load'):
+        st.write('📤 **Cargar históricos de contratos**')
         col1, col2 = st.columns(2)
         with col1:
             arch1 = st.file_uploader(':zap: Energía', type='csv', key='kw_up')
