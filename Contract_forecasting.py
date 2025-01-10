@@ -170,7 +170,8 @@ def main():
 
         div[data-testid="stMetricValue"]{
             font-size:2.8em;
-            color: #000000;
+            color: #FFFFFF;
+            font:'Prompt';
         }
 
         h3, label[data-testid="stMetricLabel"] p{
