@@ -154,12 +154,12 @@ def main():
         .css-1v0mbdj {
             margin-top: 0px !important;
         }
-        .css-1v0mbdj.e1tzin5v3 {
-            color: #FFFFFF !important; /* Color verde para st.success */
+       .css-1v0mbdj.e1tzin5v3 {
+            color: #ffffff !important; /* Color verde para st.sidebar.success */
         }
     
         .css-1v0mbdj.e1tzin5v4 {
-            color: #ff9800 !important; /* Color naranja para st.warning */
+            color: #ff9800 !important; /* Color naranja para st.sidebar.warning */
         }
     </style>
     """, unsafe_allow_html=True)
