@@ -145,11 +145,11 @@ def estilo():
             }
 
             div[data-testid="stMetric"] {
-                background-color: #095a81ff;  /* Color de fondo verde */
+                background-color: #095a81f0;  /* Color de fondo verde */
                 border-radius: 8px;         /* Esquinas redondeadas */
                 padding: 10px;              /* Añadir algo de padding */
                 color: white;               /* Cambiar color del texto a blanco */
-                font-size:2.8em;
+                font-size:2.8em !important;
             }
 
             
