@@ -116,7 +116,7 @@ def graficar(resultados):
                      title_text='<b>Precio ($COP/kWh)</b>', titlefont_size=18, tickfont_size=16, title_font_color='black',
                      tickformat='.2f')
     fig.update_traces(hovertemplate='Año:</b> %{x}<br><b>Precio Contrato:</b> %{y:.2f} GW-mes<extra></extra>')
-    fig.update_layout(title='', plot_bgcolor='rgba(0,0,0,0)', width=970, height=450,
+    fig.update_layout(title='', plot_bgcolor='rgba(0,0,0,0)', width=920, height=450,
                       font=dict(family="Prompt", color='black'),
                       legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1,
                                   font_size=16, font_color='black'),
@@ -235,6 +235,6 @@ def main():
             col3.metric(':arrow_down::heavy_dollar_sign: Precio mínimo de firma (COP/kWh)', round(pron_down,2))
             st.markdown('<br>', unsafe_allow_html=True)
             if energia > 0:
-                st.plotly_chart(graficar(res_graf), use_container_width=True)
+                st.plotly_chart(graficar(res_graf))
 if __name__ == "__main__":
     main()
