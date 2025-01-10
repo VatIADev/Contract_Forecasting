@@ -164,7 +164,7 @@ def main():
 
         .st-key-cont-load, .st-key-cont-result{
             background-color:#396425ff !important;
-            padding: 0.1em;
+            padding: 0.4em;
             border-radius: 20px;
         }
         
