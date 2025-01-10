@@ -137,6 +137,23 @@ def main():
     st.set_page_config(page_title="Pronóstico Contratos Vatia",page_icon="images/icon.png",layout="wide")
     st.markdown(font, unsafe_allow_html=True)
     est_pron = False
+    st.sidebar.markdown(
+    """
+    <style>
+        [data-testid="stSidebar"] > div:first-child {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+        
+        [data-testid="stSidebar"] img {
+            margin-top: -70px;  /* Ajustar según el espacio requerido */
+            margin-left: 0px;
+        }
+    </style>
+    """, unsafe_allow_html=True
+    )
     st.sidebar.image("images/LogoVatia.png",caption="",use_container_width=True)
     st.sidebar.divider()
     st.sidebar.header("Pronósticos Contratos")
