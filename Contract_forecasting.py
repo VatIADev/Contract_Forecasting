@@ -119,7 +119,7 @@ def graficar(resultados):
     fig.update_layout(title='', plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(220, 220, 220, 220)',
                       font=dict(family="Prompt", color='black'),
                       legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=0.98,
-                                  font_size=16, font_color='black'),
+                                  font_size=16, font_color='black'), margin=dict(l=50, r=10, t=30, b=50) 
                       showlegend=True)
     return fig
 
