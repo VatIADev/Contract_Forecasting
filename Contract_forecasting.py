@@ -163,7 +163,7 @@ def main():
         }
 
         .st-cont-load{
-            background-color: !important;
+            background-color:#396425ff  !important;
             padding: 20px;
             border-radius: 20px;
         }
