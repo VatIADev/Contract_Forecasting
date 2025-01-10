@@ -174,12 +174,12 @@ def main():
     '''
     <style>
     .streamlit-expanderHeader {
-        background-color: red;
-        color: black; # Adjust this for expander header color
+        background-color: white;
+        color: blue; # Adjust this for expander header color
     }
     .streamlit-expanderContent {
         background-color: white;
-        color: black; # Expander content color
+        color: blue; # Expander content color
     }
     </style>
     ''',
