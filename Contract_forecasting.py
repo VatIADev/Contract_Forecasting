@@ -197,7 +197,7 @@ def main():
     est_pron = False
     st.sidebar.image("images/LogoVatia.png",caption="")
     st.sidebar.divider()
-    st.sidebar.header("Pronósticos Contratos")
+    st.header("Pronósticos Contratos")
     st.markdown('<br>', unsafe_allow_html=True)
     st.sidebar.write('**Notificaciones**')
     st.markdown('<br>', unsafe_allow_html=True)
