@@ -164,13 +164,8 @@ def main():
 
         .st-key-cont-load, .st-key-cont-result{
             background-color:#396425ff !important;
-            padding: 20px;
-            border-radius: 20px;
-        }
-
-        .stNumberInput input[aria-label="test color2"] {
-            background-color: #cc0066;
-            color: #ffff33;
+            padding: 10px;
+            border-radius: 10px;
         }
         
     </style>
