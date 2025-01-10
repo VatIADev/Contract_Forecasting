@@ -140,6 +140,7 @@ def main():
     st.sidebar.markdown(
     """
     <style type=text/css>
+         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap');
         [data-testid="stSidebar"] > div:first-child {
             display: flex;
             justify-content: flex-start;
