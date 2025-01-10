@@ -117,7 +117,7 @@ def graficar(resultados):
                      tickformat='.2f')
     fig.update_traces(hovertemplate='Año:</b> %{x}<br><b>Precio Contrato:</b> %{y:.2f} GW-mes<extra></extra>')
     fig.update_layout(title='', plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
-                      font=dict(family="Prompt", color='black'),
+                      font=dict(family="Prompt", color='white'),
                       legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=0.98,
                                   font_size=16, font_color='black'), 
                       showlegend=True, margin=dict(l=50, r=50, t=30, b=50))
