@@ -168,8 +168,9 @@ def main():
             border-radius: 20px;
         }
 
-        .st-key-precio_input{
-            color:#000000 !important;
+        .stNumberInput input[aria-label="test color2"] {
+            background-color: #cc0066;
+            color: #ffff33;
         }
         
     </style>
