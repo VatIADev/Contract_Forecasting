@@ -169,7 +169,6 @@ def estilo():
                 font-size:2.8em;
                 color: #FFFFFF;
                 font-family:'Prompt' !important;
-                background-color:'#095a81' !important;
             }
     
             h3, label[data-testid="stMetricLabel"] p{
