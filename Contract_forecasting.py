@@ -159,7 +159,7 @@ def main():
     </style>
     """, unsafe_allow_html=True
     )
-    st.sidebar.markdown('<div class="sidebar-image"><img src="images/LogoVatia.png" alt="Logo"></div>', unsafe_allow_html=True)
+    st.sidebar.markdown('<div class="sidebar-image"><img src="./images/LogoVatia.png" alt="Logo"></div>', unsafe_allow_html=True)
     st.sidebar.divider()
     st.sidebar.header("Pronósticos Contratos")
     st.markdown('<br>', unsafe_allow_html=True)
