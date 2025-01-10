@@ -172,7 +172,7 @@ def estilo():
                 font-size: 1.3em;
             }
 
-            .st-key-cont-variables{
+            .st-key-cont-variables p{
                 background-color:#396425ff !important;
             }
 
