@@ -126,12 +126,55 @@ def graficar(resultados):
 def estilo():
      st.markdown(
      """
-      <style>
-          @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap');
-
-          body, h1, h2, h3, h4, h5, h6, p, .stDataFrame, .css-1y0t9o9, .stButton>button, .css-1wa3eu0, .css-10jvk68, .css-1y0t9o9 {
-              font-family: 'Prompt', sans-serif !important;
-          }
+     <style type=text/css>
+            @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap');
+    
+            body, h1, h2, h3, h4, h5, h6, p, .stDataFrame, .css-1y0t9o9, .stButton>button, .css-1wa3eu0, .css-10jvk68, .css-1y0t9o9 .stMetricValue {
+            font-family: 'Prompt', sans-serif !important;
+            }
+    
+    
+            [data-testid="stSidebar"] > div:first-child {
+                display: flex;
+                justify-content: flex-start;
+                align-items: flex-start;
+                flex-direction: column;
+            }
+            
+            [data-testid="stSidebar"] img {
+                margin-top: -70px;  /* Ajustar según el espacio requerido */
+                margin-left: 0px;
+            }
+            .css-1v0mbdj {
+                margin-top: 0px !important;
+            }
+            .css-1v0mbdj.e1tzin5v3 {
+                color: #ffffff !important; /* Color verde para st.sidebar.success */
+            }
+        
+            .css-1v0mbdj.e1tzin5v4 {
+                color: #ff9800 !important; /* Color naranja para st.sidebar.warning */
+            }
+    
+            .st-key-cont-load, .st-key-cont-result{
+                background-color:#396425ff !important;
+                padding: 1.5em;
+                border-radius: 20px;
+            }
+    
+            div[data-testid="stMetricValue"]{
+                font-size:2.8em;
+                color: #FFFFFF;
+                font-family: 'Prompt'
+            }
+    
+            h3, label[data-testid="stMetricLabel"] p{
+                font-size: 1.3em !important;
+            }
+    
+            div[data-testid="stMetricDelta"] {
+                font-size: 1.3em;
+            }
 
       </style>
       """, unsafe_allow_html=True)
@@ -142,54 +185,6 @@ def main():
     st.set_page_config(page_title="Pronóstico Contratos Vatia",page_icon="images/icon.png",layout="wide")
     estilo()
     est_pron = False
-    st.sidebar.markdown(
-    """
-    <style type=text/css>
-         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap');
-        [data-testid="stSidebar"] > div:first-child {
-            display: flex;
-            justify-content: flex-start;
-            align-items: flex-start;
-            flex-direction: column;
-        }
-        
-        [data-testid="stSidebar"] img {
-            margin-top: -70px;  /* Ajustar según el espacio requerido */
-            margin-left: 0px;
-        }
-        .css-1v0mbdj {
-            margin-top: 0px !important;
-        }
-        .css-1v0mbdj.e1tzin5v3 {
-            color: #ffffff !important; /* Color verde para st.sidebar.success */
-        }
-    
-        .css-1v0mbdj.e1tzin5v4 {
-            color: #ff9800 !important; /* Color naranja para st.sidebar.warning */
-        }
-
-        .st-key-cont-load, .st-key-cont-result{
-            background-color:#396425ff !important;
-            padding: 1.5em;
-            border-radius: 20px;
-        }
-
-        div[data-testid="stMetricValue"]{
-            font-size:2.8em;
-            color: #FFFFFF;
-            font-family: 'Prompt'
-        }
-
-        h3, label[data-testid="stMetricLabel"] p{
-            font-size: 1.3em !important;
-        }
-
-        div[data-testid="stMetricDelta"] {
-            font-size: 1.3em;
-        }
-        
-    </style>
-    """, unsafe_allow_html=True)
     st.sidebar.image("images/LogoVatia.png",caption="")
     st.sidebar.divider()
     st.sidebar.header("Pronósticos Contratos")
