@@ -136,6 +136,10 @@ def estilo():
             div[data-testid="stAppViewBlockContainer"]{
                 padding-top:0px;
             }
+
+            body {
+                margin-top: 0 !important;
+            }
     
             [data-testid="stSidebar"] > div:first-child {
                 display: flex;
