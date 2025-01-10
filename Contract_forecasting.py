@@ -152,7 +152,7 @@ def estilo():
             }
             
             [data-testid="stSidebar"] img {
-                margin-top: -70px;  /* Ajustar según el espacio requerido */
+                margin-top: -70px; !important /* Ajustar según el espacio requerido */
                 margin-left: 0px;
             }
             .css-1v0mbdj {
@@ -168,8 +168,8 @@ def estilo():
             div[data-testid="stMetricValue"]{
                 font-size:2.8em;
                 color: #FFFFFF;
-                font-family:'Prompt';
-                background-color:'#095a81';
+                font-family:'Prompt' !important;
+                background-color:'#095a81' !important;
             }
     
             h3, label[data-testid="stMetricLabel"] p{
