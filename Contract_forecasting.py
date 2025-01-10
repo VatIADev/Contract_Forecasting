@@ -132,7 +132,10 @@ def estilo():
             body, h1, h2, h3, h4, h5, h6, p, .stDataFrame, .css-1y0t9o9, .stButton>button, .css-1wa3eu0, .css-10jvk68, .css-1y0t9o9 .stMetricValue {
             font-family: 'Prompt', sans-serif !important;
             }
-    
+
+            div[data-testid="stAppViewBlockContainer"]{
+                padding-top:0px;
+            }
     
             [data-testid="stSidebar"] > div:first-child {
                 display: flex;
@@ -148,13 +151,6 @@ def estilo():
             .css-1v0mbdj {
                 margin-top: 0px !important;
             }
-            .css-1v0mbdj.e1tzin5v3 {
-                color: #ffffff !important; /* Color verde para st.sidebar.success */
-            }
-        
-            .css-1v0mbdj.e1tzin5v4 {
-                color: #ff9800 !important; /* Color naranja para st.sidebar.warning */
-            }
     
             .st-key-cont-load, .st-key-cont-result{
                 background-color:#396425ff !important;
@@ -165,7 +161,7 @@ def estilo():
             div[data-testid="stMetricValue"]{
                 font-size:2.8em;
                 color: #FFFFFF;
-                font-family: 'Prompt'
+                font-family:'Prompt':
             }
     
             h3, label[data-testid="stMetricLabel"] p{
