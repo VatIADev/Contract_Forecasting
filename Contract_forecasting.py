@@ -154,26 +154,7 @@ def main():
     </style>
     """, unsafe_allow_html=True
     )
-    st.sidebar.image("images/LogoVatia.png",caption="",use_container_width=True)
-    st.sidebar.markdown(
-    """
-    <style>
-    .center-image {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .center-image img {
-        max-width: 100%;  /* Ajusta al contenedor */
-        height: auto;     /* Mantiene proporción */
-    }
-    </style>
-    <div class="center-image">
-        <img src="images/LogoVatia.png" alt="Logo">
-    </div>
-    """,
-    unsafe_allow_html=True
-    )
+    st.sidebar.image("images/LogoVatia.png",caption="")
     st.sidebar.divider()
     st.sidebar.header("Pronósticos Contratos")
     st.markdown('<br>', unsafe_allow_html=True)
