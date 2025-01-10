@@ -120,7 +120,7 @@ def graficar(resultados):
                       font=dict(family="Prompt", color='black'),
                       legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=0.98,
                                   font_size=16, font_color='black'), 
-                      showlegend=True, margin=dict(l=50, r=50, t=30, b=50) )
+                      showlegend=True, margin=dict(l=50, r=50, t=30, b=50))
     return fig
 
 def main():
@@ -235,6 +235,6 @@ def main():
             col3.metric(':arrow_down::heavy_dollar_sign: Precio mínimo de firma (COP/kWh)', round(pron_down,2))
             st.markdown('<br>', unsafe_allow_html=True)
             if energia > 0:
-                st.plotly_chart(graficar(res_graf))
+                st.plotly_chart(graficar(res_graf), use_container_width=True)
 if __name__ == "__main__":
     main()
