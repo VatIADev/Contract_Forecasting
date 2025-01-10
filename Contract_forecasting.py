@@ -162,11 +162,6 @@ def main():
             color: #ff9800 !important; /* Color naranja para st.sidebar.warning */
         }
         
-        .st-exp-load{
-            border: 2px solid #aeea00ff !important;
-            padding: 20px;
-            border-radius: 10px;
-        }
     </style>
     """, unsafe_allow_html=True)
     st.sidebar.image("images/LogoVatia.png",caption="")
@@ -175,7 +170,22 @@ def main():
     st.markdown('<br>', unsafe_allow_html=True)
     st.sidebar.write('**Notificaciones**')
     st.markdown('<br>', unsafe_allow_html=True)
-    with st.expander('📤 **Cargar históricos de contratos**',expanded=True, key='exp_load'):
+    st.markdown(
+    '''
+    <style>
+    .streamlit-expanderHeader {
+        background-color: red;
+        color: black; # Adjust this for expander header color
+    }
+    .streamlit-expanderContent {
+        background-color: white;
+        color: black; # Expander content color
+    }
+    </style>
+    ''',
+    unsafe_allow_html=True
+    )
+    with st.expander('📤 **Cargar históricos de contratos**',expanded=True):
         col1, col2 = st.columns(2)
         with col1:
             arch1 = st.file_uploader(':zap: Energía', type='csv', key='kw_up')
