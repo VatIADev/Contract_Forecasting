@@ -173,8 +173,8 @@ def estilo():
             }
 
             div[data-testid="stVerticalBlock"][key="cont-variable"] {
-                border: 2px solid #396425; /* Borde de 2px y color verde */
-                border-radius: 8px; /* Esquinas redondeadas */
+                border: 30px solid #396425; /* Borde de 2px y color verde */
+                border-radius: 30px; /* Esquinas redondeadas */
                 padding: 0px; /* Sin padding */
             }
 
