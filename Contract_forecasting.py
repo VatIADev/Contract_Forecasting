@@ -162,7 +162,7 @@ def main():
             color: #ff9800 !important; /* Color naranja para st.sidebar.warning */
         }
 
-        .st-key-cont-load{
+        .st-key-cont-load .st-key-cont-result{
             background-color:#396425ff !important;
             padding: 20px;
             border-radius: 20px;
@@ -228,7 +228,8 @@ def main():
         else:
             pron_up, pron_down = round(0.00,2), round(0.00,2)
 
-        with st.expander('📊 **Información de Pronóstico de Contrato:**',expanded=True):
+        with st.container(key=cont-result):
+            st.write('📊 **Información de Pronóstico de Contrato:**')
             col3, col4 = st.columns([3,3])
             col4.metric(':arrow_up::heavy_dollar_sign: Precio máximo de firma (COP/kWh)', round(pron_up,2))
             col3.metric(':arrow_down::heavy_dollar_sign: Precio mínimo de firma (COP/kWh)', round(pron_down,2))
