@@ -162,7 +162,7 @@ def main():
             color: #ff9800 !important; /* Color naranja para st.sidebar.warning */
         }
 
-        .st-key-cont-load .st-key-cont-result{
+        .st-key-cont-load, .st-key-cont-result{
             background-color:#396425ff !important;
             padding: 20px;
             border-radius: 20px;
