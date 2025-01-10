@@ -163,7 +163,7 @@ def main():
         }
 
         .st-cont-load{
-            background-color:#396425ff  !important;
+            background-color:#396425ff !important;
             padding: 20px;
             border-radius: 20px;
         }
@@ -177,7 +177,7 @@ def main():
     st.sidebar.write('**Notificaciones**')
     st.markdown('<br>', unsafe_allow_html=True)
     
-    with st.container(key='cont-load'):
+    with st.container(key='cont-load',border=True):
         st.write('📤 **Cargar históricos de contratos**')
         col1, col2 = st.columns(2)
         with col1:
