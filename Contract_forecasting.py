@@ -140,6 +140,10 @@ def estilo():
             body {
                 margin-top: 0 !important;
             }
+
+            div[data-testid="stVerticalBlock"] {
+                margin-top: 0 !important;
+            }
     
             [data-testid="stSidebar"] > div:first-child {
                 display: flex;
