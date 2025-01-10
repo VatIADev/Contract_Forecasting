@@ -162,13 +162,13 @@ def main():
             color: #ff9800 !important; /* Color naranja para st.sidebar.warning */
         }
         .streamlit-expanderHeader {
-            border: 2px solid #FF5733 !important;  /* Color del borde */
+            border: 2px solid #aeea00ff !important;  /* Color del borde */
             border-radius: 5px;  /* Bordes redondeados */
             padding: 5px;  /* Espaciado interno */
         }
         .streamlit-expanderContent {
-            border-left: 5px solid #FF5733 !important;  /* Borde izquierdo */
-            border-right: 5px solid #FF5733 !important; /* Borde derecho */
+            border-left: 5px solid ##eea00ff !important;  /* Borde izquierdo */
+            border-right: 5px solid #aeea00ff !important; /* Borde derecho */
         }
     </style>
     """, unsafe_allow_html=True)
