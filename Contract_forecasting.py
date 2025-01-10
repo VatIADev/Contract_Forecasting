@@ -235,6 +235,6 @@ def main():
             col3.metric(':arrow_down::heavy_dollar_sign: Precio mínimo de firma (COP/kWh)', round(pron_down,2))
             st.markdown('<br>', unsafe_allow_html=True)
             if energia > 0:
-                st.plotly_chart(graficar(res_graf), use_container_width=True)
+                st.plotly_chart(graficar(res_graf))
 if __name__ == "__main__":
     main()
