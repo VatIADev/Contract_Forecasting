@@ -203,7 +203,7 @@ def main():
     st.markdown('<br>', unsafe_allow_html=True)
     
     with st.container(key='cont-load'):
-        mensaje, color_dinamico = "📤 **Cargar históricos de contratos**","#aeea00" 
+        mensaje, color_dinamico = "📤 Cargar históricos de contratos","#aeea00" 
         st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1:
@@ -255,7 +255,8 @@ def main():
             pron_up, pron_down = round(0.00,2), round(0.00,2)
 
         with st.container(key='cont-result'):
-            st.write('📊 **Información: Pronóstico de Contrato**')
+            mensaje = '📊 Información: Pronóstico de Contrato'
+            st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
             col3, col4 = st.columns([3,3])
             col4.metric(':arrow_up::heavy_dollar_sign: Precio máximo de firma (COP/kWh)', round(pron_up,2))
             col3.metric(':arrow_down::heavy_dollar_sign: Precio mínimo de firma (COP/kWh)', round(pron_down,2))
