@@ -113,7 +113,7 @@ def graficar(resultados):
     fig.update_xaxes(showline=True, linewidth=2, linecolor='white', gridcolor='lightgray', mirror=False, tickfont_color='white',
                      title_text='<b>📆 Año</b>', titlefont_size=18, tickfont_size=16, title_font_color='white',)
     fig.update_yaxes(showline=True, linewidth=2, linecolor='white', gridcolor='lightgray', mirror=False, tickfont_color='white',
-                     title_text='<b>Precio (COP/kWh)</b>', titlefont_size=18, tickfont_size=16, title_font_color='white',
+                     title_text='<b>💲Precio (COP/kWh)</b>', titlefont_size=18, tickfont_size=16, title_font_color='white',
                      tickformat='.2f')
     fig.update_traces(hovertemplate='Año:</b> %{x}<br><b>Precio Contrato:</b> %{y:.2f} GW-mes<extra></extra>')
     fig.update_layout(title='', plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
@@ -259,8 +259,8 @@ def main():
             mensaje = '📊 Información: Pronóstico de Contrato'
             st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
             col3, col4 = st.columns([3,3])
-            col4.metric(':arrow_up::heavy_dollar_sign: Precio máximo de firma (COP/kWh)', round(pron_up,2))
-            col3.metric(':arrow_down::heavy_dollar_sign: Precio mínimo de firma (COP/kWh)', round(pron_down,2))
+            col4.metric(':arrow_up:💲Precio máximo de firma (COP/kWh)', round(pron_up,2))
+            col3.metric(':arrow_down:💲Precio mínimo de firma (COP/kWh)', round(pron_down,2))
             st.markdown('<br>', unsafe_allow_html=True)
             if energia > 0:
                 st.plotly_chart(graficar(res_graf), use_container_width=True)
