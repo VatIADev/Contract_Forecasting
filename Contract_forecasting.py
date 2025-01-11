@@ -115,7 +115,7 @@ def graficar(resultados):
     fig.update_yaxes(showline=True, linewidth=2, linecolor='white', gridcolor='lightgray', mirror=False, tickfont_color='white',
                      title_text='<b>Precio (COP/kWh)</b>', titlefont_size=18, tickfont_size=16, title_font_color='white',
                      tickformat='.2f')
-    fig.update_traces(hovertemplate='📆 Año:</b> %{x}<br><b>💲Precio Unitario Contrato:</b> %{y:.2f} COP/kWh<extra></extra>')
+    fig.update_traces(hovertemplate='<b>📆 Año:</b> %{x}<br><b>💲Precio Unitario Contrato:</b> %{y:.2f} COP/kWh<extra></extra>')
     fig.update_layout(title='', plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
                       font=dict(family="Prompt", color='white'),
                       legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=0.98,
