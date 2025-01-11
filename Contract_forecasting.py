@@ -237,9 +237,9 @@ def main():
         st.markdown('<br>', unsafe_allow_html=True)
         st.sidebar.divider()
         contenedor = st.sidebar.container(key='cont-variables', border=True)
-        contenedor.write('**Parámetros del Contrato**')
-        plazo_ejec = contenedor.slider(':calendar: Plazo de ejecución (Años)', 0, 15, 15)
-        duracion = contenedor.slider(':calendar: Duración (Años)', 0, 15, 15)
+        contenedor.write('**📋 Condiciones del Contrato**')
+        plazo_ejec = contenedor.slider('🗓️ Plazo de ejecución (Años)', 0, 15, 15)
+        duracion = contenedor.slider('⏳ Duración (Años)', 0, 15, 15)
         energia = contenedor.number_input(":zap: Energía a contratar (GWh)",key='precio_input', min_value=0.0000,step=0.0001,format="%.4f")
         alpha_lit = contenedor.selectbox(':dart: Rango de Precisión', ['Alto','Medio','Bajo'],key='alfa',)
         if alpha_lit == 'Alto':
