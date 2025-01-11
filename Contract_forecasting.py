@@ -199,7 +199,7 @@ def main():
     st.sidebar.divider()
     st.header("Pronósticos Contratos")
     st.markdown('<br>', unsafe_allow_html=True)
-    st.sidebar.write('**Notificaciones**')
+    st.sidebar.write('🚨 **Notificaciones**')
     st.markdown('<br>', unsafe_allow_html=True)
     
     with st.container(key='cont-load'):
