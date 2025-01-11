@@ -235,6 +235,7 @@ def main():
             st.session_state['Contratos'] = contratos
         contratos_f2 = st.session_state['Contratos']
         st.markdown('<br>', unsafe_allow_html=True)
+        st.sidebar.divider()
         contenedor = st.sidebar.container(key='cont-variables', border=True)
         contenedor.write('**Parámetros del Contrato**')
         plazo_ejec = contenedor.slider(':calendar: Plazo de ejecución (Años)', 0, 15, 15)
