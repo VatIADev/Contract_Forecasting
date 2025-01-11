@@ -155,7 +155,7 @@ def estilo():
             div[data-testid="stMetric"] {
                 background-color: rgba(9, 90, 129, 0.5);
                 border-radius: 20px;         /* Esquinas redondeadas */
-                padding: 20px;              /* Añadir algo de padding */
+                padding: 15px;              /* Añadir algo de padding */
                 color: white;               /* Cambiar color del texto a blanco */
                 font-family: 'Prompt', sans-serif !important;
             }
