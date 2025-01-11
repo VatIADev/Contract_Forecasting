@@ -111,7 +111,7 @@ def graficar(resultados):
     fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_min'], mode='lines+markers', marker=dict(size=10,color='rgba (174, 234, 0, 1)', opacity=0.8),
                              fill='tonexty', line=dict(width=3, color='rgba (174, 234, 0, 1)', dash='dash'), name='Precio Contratos', fillcolor='rgba(9, 90, 129, 0.5)'))
     fig.update_xaxes(showline=True, linewidth=2, linecolor='white', gridcolor='lightgray', mirror=False, tickfont_color='white',
-                     title_text='<b>📆 Año</b>', titlefont_size=18, tickfont_size=16, title_font_color='white',)
+                     title_text='<b>📆 Año</b>', titlefont_size=18, tickformat="%b %Y", tickfont_size=16, title_font_color='white',)
     fig.update_yaxes(showline=True, linewidth=2, linecolor='white', gridcolor='lightgray', mirror=False, tickfont_color='white',
                      title_text='<b>💲Precio (COP/kWh)</b>', titlefont_size=18, tickfont_size=16, title_font_color='white',
                      tickformat='.2f')
