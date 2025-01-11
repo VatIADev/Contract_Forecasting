@@ -203,7 +203,8 @@ def main():
     st.markdown('<br>', unsafe_allow_html=True)
     
     with st.container(key='cont-load'):
-        st.write('📤 **Cargar históricos de contratos**')
+        mensaje,color_dinamico = "📤 **Cargar históricos de contratos**","rgba (174, 234, 0, 1)" 
+        st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold; text-decoration:underline;">{mensaje}</p>')
         col1, col2 = st.columns(2)
         with col1:
             arch1 = st.file_uploader(':zap: Energía', type='csv', key='kw_up')
