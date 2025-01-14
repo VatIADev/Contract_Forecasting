@@ -168,7 +168,7 @@ def estilo():
                 margin-top: 0px !important;
             }
     
-            .st-key-cont-load, .st-key-cont-result{
+            .st-key-cont-load, .st-key-cont-result, .st-key-cont-result-2{
                 background-color:#396425ff !important;
                 padding: 1.5em;
                 border-radius: 20px;
@@ -263,6 +263,7 @@ def main():
             col4.metric(':arrow_up:💲Precio máximo de firma (COP/kWh)', round(pron_up,2))
             col3.metric(':arrow_down:💲Precio mínimo de firma (COP/kWh)', round(pron_down,2))
             st.markdown('<br>', unsafe_allow_html=True)
+        with tab2.container(key='cont-result-2'):
             if energia > 0:
                 st.plotly_chart(graficar(res_graf), use_container_width=True)
 if __name__ == "__main__":
