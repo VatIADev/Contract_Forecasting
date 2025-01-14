@@ -255,6 +255,7 @@ def main():
         else:
             pron_up, pron_down = round(0.00,2), round(0.00,2)
 
+        tab1, tab2 = st.tabs(["📊 Contrato", "📈 Pronóstico de MC"])
         with st.container(key='cont-result'):
             mensaje = '📊 Información: Pronóstico de Contrato'
             st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
