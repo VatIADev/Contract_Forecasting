@@ -253,9 +253,9 @@ def main():
         elif alpha_lit == 'Bajo':
             alpha = 0.5
         modelo, t_c, std = entrenar(contratos_f2,alpha)
+        res_graf = totales(contratos_f2,modelo,t_c,std)
         if energia > 0:
             pron_up, pron_down = pronostico(modelo,pd.DataFrame([[energia,plazo_ejec,duracion]],columns=['GW_TOTAL','PLAZO','DURACION']),t_c,std)
-            res_graf = totales(contratos_f2,modelo,t_c,std)
         else:
             pron_up, pron_down = round(0.00,2), round(0.00,2)
 
@@ -268,7 +268,6 @@ def main():
             col3.metric(':arrow_down:💲Precio mínimo de firma (COP/kWh)', round(pron_down,2))
             st.markdown('<br>', unsafe_allow_html=True)
         with tab1.container(key='cont-result-2'):
-            if energia > 0:
-                st.plotly_chart(graficar(res_graf), use_container_width=True)
+            st.plotly_chart(graficar(res_graf), use_container_width=True)
 if __name__ == "__main__":
     main()
