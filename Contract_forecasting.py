@@ -184,6 +184,7 @@ def estilo():
 
             div[data-testid="stMetricValue"]{
                 font-size:2.8em;
+                font-family: 'Prompt', sans-serif !important;
             }
 
             button[data-baseweb="tab"] p{
