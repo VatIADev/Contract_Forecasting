@@ -188,6 +188,7 @@ def estilo():
 
             button[data-baseweb="tab"] p{
                 font-size:18px!important;
+                font-weight: bold;
             }
       </style>
       """, unsafe_allow_html=True)
