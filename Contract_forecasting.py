@@ -252,8 +252,10 @@ def main():
             alpha = 0.7
         elif alpha_lit == 'Bajo':
             alpha = 0.5
+        
         modelo, t_c, std = entrenar(contratos_f2,alpha)
         res_graf = totales(contratos_f2,modelo,t_c,std)
+        
         if energia > 0:
             pron_up, pron_down = pronostico(modelo,pd.DataFrame([[energia,plazo_ejec,duracion]],columns=['GW_TOTAL','PLAZO','DURACION']),t_c,std)
         else:
