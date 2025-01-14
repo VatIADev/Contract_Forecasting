@@ -186,6 +186,9 @@ def estilo():
                 font-size:2.8em;
             }
 
+            button[data-baseweb="tab"] p{
+                font-size:18px!important;
+            }
       </style>
       """, unsafe_allow_html=True)
     
