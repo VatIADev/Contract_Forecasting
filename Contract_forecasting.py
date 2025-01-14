@@ -259,15 +259,15 @@ def main():
         else:
             pron_up, pron_down = round(0.00,2), round(0.00,2)
 
-        tab1, tab2 = st.tabs(["📊 Valoración Precio de Contratos", "📈 Pronóstico de MC"])
-        with tab1.container(key='cont-result'):
+        tab1, tab2 = st.tabs(["📈 Pronóstico de MC","📊 Valoración Precio de Contratos"])
+        with tab2.container(key='cont-result'):
             mensaje = '📊 Información: Pronóstico de Contrato'
             st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
             col3, col4 = st.columns([3,3])
             col4.metric(':arrow_up:💲Precio máximo de firma (COP/kWh)', round(pron_up,2))
             col3.metric(':arrow_down:💲Precio mínimo de firma (COP/kWh)', round(pron_down,2))
             st.markdown('<br>', unsafe_allow_html=True)
-        with tab2.container(key='cont-result-2'):
+        with tab1.container(key='cont-result-2'):
             if energia > 0:
                 st.plotly_chart(graficar(res_graf), use_container_width=True)
 if __name__ == "__main__":
