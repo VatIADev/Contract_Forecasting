@@ -83,7 +83,6 @@ def transfer_PSI_columns(df1, df2):
         'MES': 'MES_FIRMA'
     })
     merged_df = pd.merge(df2, df1_relevant, on=['AÑO_FIRMA', 'MES_FIRMA'],how='left')
-    st.write(merged_df)
     return merged_df
 
 @st.cache_data
