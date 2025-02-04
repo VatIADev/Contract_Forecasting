@@ -277,7 +277,7 @@ def main():
             mensaje = '📋 Condiciones del Contrato'
             st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
             col1, col2 = st.columns([3,3])
-            plazo_ejec = col1.slider('🗓️ Plazo de ejecución (Años)', 0, 15, 15, key='plazo_uni')
+            plazo_ejec = col1.slider('🗓️ Inicio del Contrato (Años)', 0, 15, 15, key='plazo_uni')
             duracion_cu = col2.slider('⏳ Duración (Años)', 0, 15, 15, key='duracion_uni')
             aportes_cu = (col1.slider('🌧️ Aportes (%)', -100.0, 100.0, 0.0, key='aportes_uni')/100) + 1
             volumen_cu = col2.slider('💧⚡ Volumen Util Embalses (%)', 0.0, 100.0, 50.0, key='volumen_uni')/100
@@ -307,7 +307,7 @@ def main():
             mensaje = '📋 Condiciones del Contrato'
             st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
             col5,col6 = st.columns([2000,1])
-            duracion_g = col5.slider('⏳ Duración (Años)', 0, 15, 15, key='duracion-gra')
+            duracion_g = col5.slider('⏳ Inicio del Contrato (Años)', 0, 15, 15, key='duracion-gra')
             col7,col8 = st.columns([1,1])
             aportes_g = (col7.slider('🌧️ Aportes (%)', -100.0, 100.0, 0.0, key='aportes-gra')/100)+1
             volumen_g = col8.slider('💧⚡ Volumen Util Embalses (%)', 0.0, 100.0, 50.0, key='volumen-gra')/100
