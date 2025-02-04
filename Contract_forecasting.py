@@ -277,12 +277,12 @@ def main():
             mensaje = '📋 Condiciones del Contrato'
             st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
             col1, col2 = st.columns([3,3])
-            plazo_ejec = col1.slider('🗓️ Inicio del Contrato (Años)', 0, 15, 15, key='plazo_uni')
+            plazo_ejec = col1.slider('🗓️ Inicio del contrato (Años)', 0, 15, 15, key='plazo_uni')
             duracion_cu = col2.slider('⏳ Duración (Años)', 0, 15, 15, key='duracion_uni')
             aportes_cu = (col1.slider('🌧️ Aportes (%)', -100.0, 100.0, 0.0, key='aportes_uni')/100) + 1
-            volumen_cu = col2.slider('💧⚡ Volumen Util Embalses (%)', 0.0, 100.0, 50.0, key='volumen_uni')/100
+            volumen_cu = col2.slider('💧⚡ Volumen útil embalses (%)', 0.0, 100.0, 50.0, key='volumen_uni')/100
             energia_cu = col1.number_input("⚡ Energía a contratar (GWh)",key='precio_input_uni', min_value=0.00000,step=0.00001,format="%.5f")
-            pBolsa_cu = col2.number_input("💲⚡ Precio de Bolsa (COP/kWh)",key='pbolsa_input_uni', min_value=0.00,step=0.01,format="%.2f")
+            pBolsa_cu = col2.number_input("💲⚡ Precio de bolsa (COP/kWh)",key='pbolsa_input_uni', min_value=0.00,step=0.01,format="%.2f")
           
             if energia_cu > 0:
                 if pBolsa_cu > 0:
@@ -306,18 +306,16 @@ def main():
         with tab1.container(key='cont-result-2'):
             mensaje = '📋 Condiciones del Contrato'
             st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
-            col5,col6 = st.columns([2000,1])
-            duracion_g = col5.slider('⏳ Inicio del Contrato (Años)', 0, 15, 15, key='duracion-gra')
             col7,col8 = st.columns([1,1])
             aportes_g = (col7.slider('🌧️ Aportes (%)', -100.0, 100.0, 0.0, key='aportes-gra')/100)+1
-            volumen_g = col8.slider('💧⚡ Volumen Util Embalses (%)', 0.0, 100.0, 50.0, key='volumen-gra')/100
+            volumen_g = col8.slider('💧⚡ Volumen útil embalses (%)', 0.0, 100.0, 50.0, key='volumen-gra')/100
             energia_g = col7.number_input("⚡ Energía a contratar (GWh)",key='precio-input-gra', min_value=0.00000,step=0.00001,format="%.5f")
-            pBolsa_g = col8.number_input("💲⚡ Precio de Bolsa (COP/kWh)",key='pbolsa-input-gra', min_value=0.00,step=0.01,format="%.2f")
+            pBolsa_g = col8.number_input("💲⚡ Precio de bolsa (COP/kWh)",key='pbolsa-input-gra', min_value=0.00,step=0.01,format="%.2f")
             if energia_g > 0:
                 if pBolsa_g > 0:
                     st.divider()
                     st.markdown('<br>', unsafe_allow_html=True)
-                    res_graf = totales(contratos_f2,modelo,t_c,std,energia_g, duracion_g, aportes_g, volumen_g, pBolsa_g)
+                    res_graf = totales(contratos_f2,modelo,t_c,std,energia_g, 1, aportes_g, volumen_g, pBolsa_g)
                     st.plotly_chart(graficar(res_graf), use_container_width=True)
                 else:
                     st.warning(":warning:💲 Por favor, ingrese un precio de bolsa válido.")
