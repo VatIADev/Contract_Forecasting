@@ -272,7 +272,7 @@ def main():
         elif alpha_lit == 'Bajo':
             alpha = 0.5
         modelo, t_c, std = entrenar(contratos_f2,alpha)
-        tab1, tab2 = st.tabs(["📈 Pronóstico de MC","📊 Valoración Precio de Contratos"])
+        tab1, tab2 = st.tabs(["📈 Valoración de MC","📊 Valoración Precio de Contratos"])
         with tab2.container(key='cont-result'):
             mensaje = '📋 Condiciones del Contrato'
             st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
