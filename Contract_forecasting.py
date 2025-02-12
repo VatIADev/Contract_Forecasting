@@ -19,9 +19,14 @@ def carga_historicos():
     datosHis = datosHis[['AGENTE_COMPRADOR', 'AGENTE_VENDEDOR', 'PERIODO_ADJ','CONTRATO', 'FECHA', 'KW', 'PRECIO']]
     return datosHis
 
-@st.cache_data
-def carga_FactorPSI():
-  datosPSI = pd.read_csv("data/FactorPSI.csv", sep=';', header=0, low_memory=False)
+def carga_FactorPSI(archivo, _alerta):
+  required_columns = ['AÑO','MES','PROM_PRECIO_BOLSA','APORTES','VOLUMEN_UTIL']
+  datosPSI = pd.read_csv(archivo, sep=';', header=0, low_memory=False)
+  missing_columns = [col for col in required_columns if col not in datosPSI.columns]
+  if not missing_columns:
+      _alerta.success(":heavy_check_mark: 💧 Base de datos de hidrología cargada correctamente")  
+  else:
+      return pd.DataFrame()
   return datosPSI
 
 def carga_archivos(archivo, nombre, _alerta):
@@ -29,7 +34,7 @@ def carga_archivos(archivo, nombre, _alerta):
     datos = ''
     if archivo is not None:
         datos = pd.read_csv(archivo, sep=';', header=0, low_memory=False)
-        missing_columns = [col for col in required_columns if col not in datos.columns]    
+        missing_columns = [col for col in required_columns if col not in datos.columns]
         if not missing_columns:
             datos = datos[datos['ADJUDICACION'] != 'ANTES DE SICEP']
             datos['CONTRATO'] = datos['CONTRATO'].apply(lambda x: str(int(float(x))) if x.endswith('.0') and x.replace('.0', '').isdigit() else x)
@@ -119,7 +124,9 @@ def graficar(resultados):
     fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_max'], mode='lines+markers', marker=dict(size=10,color='rgba (174, 234, 0, 1)', opacity=0.8),
                              line=dict(width=3, color='rgba (174, 234, 0, 1)', dash='dash'), name='', showlegend=False))
     fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_min'], mode='lines+markers', marker=dict(size=10,color='rgba (174, 234, 0, 1)', opacity=0.8),
-                             fill='tonexty', line=dict(width=3, color='rgba (174, 234, 0, 1)', dash='dash'), name='Precio Contratos', fillcolor='rgba(9, 90, 129, 0.5)'))
+                             fill='tonexty', line=dict(width=3, color='rgba (174, 234, 0, 1)', dash='dash'), name='Valoración MC', fillcolor='rgba(9, 90, 129, 0.5)'))
+    fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_min']-21, mode='lines+markers', marker=dict(size=10,color='rgba (234, 154, 0, 1)', opacity=0.8),
+                             line=dict(width=3, color='rgba (234, 154, 0, 1)', dash='dash'), name='Valoración Mercado No Regulado'))
     fig.update_xaxes(showline=True, linewidth=2, linecolor='white', gridcolor='lightgray', mirror=False, tickfont_color='white',
                      title_text='<b>Año</b>', tickformat="%b %Y", tickfont_size=16, title_font_color='white',)
     fig.update_yaxes(showline=True, linewidth=2, linecolor='white', gridcolor='lightgray', mirror=False, tickfont_color='white',
@@ -171,7 +178,7 @@ def estilo():
             }
 
             hr:nth-of-type(1) {
-                width: 95% !important;  
+                width: 95% !important;
             }
 
             div[data-testid="stSelectbox"], div[data-testid="stAlert"] {
@@ -186,7 +193,7 @@ def estilo():
                 margin-top: -70px  !important; /* Ajustar según el espacio requerido */
                 margin-left: 0px;
             }
-            
+
             .css-1v0mbdj {
                 margin-top: 0px !important;
             }
@@ -227,38 +234,52 @@ def main():
     st.markdown('<br>', unsafe_allow_html=True)
     st.sidebar.write('**🚨 Notificaciones**')
     ph_alerta_1 = crear_placeholder()
-    ph_alerta_2 = crear_placeholder() 
+    ph_alerta_2 = crear_placeholder()
+    ph_alerta_3 = crear_placeholder()
     st.markdown('<br>', unsafe_allow_html=True)
     st.sidebar.divider()
     st.sidebar.write('**📤📋 Cargar históricos de contratos**')
     ph_carga_1 = crear_placeholder()
-    ph_carga_2 = crear_placeholder() 
+    ph_carga_2 = crear_placeholder()
+    ph_carga_3 = crear_placeholder()
     arch1 = ph_carga_1.file_uploader(':zap: Energía', type='csv', key='kw_up')
-    arch2 = ph_carga_2.file_uploader(':heavy_dollar_sign: Precios', type='csv', key='precios_up')
-    
+    arch2 = ph_carga_2.file_uploader(':heavy_dollar_sign: Precios de contratos', type='csv', key='precios_up')
+    arch3 = ph_carga_3.file_uploader(':heavy_dollar_sign:💧 Precio de bolsa e hidrología', type='csv', key='PB_hidro')
+
     if arch1 is not None:
         kw = carga_archivos(arch1, arch1.name, ph_alerta_1)
     else:
         kw = pd.DataFrame()  # Valor predeterminado si no hay archivo
 
     if kw.empty:
-        ph_alerta_1.warning(":warning: Por favor, sube un archivo válido de energía contratada.")
+        ph_alerta_1.warning(":warning: Por favor, carga un archivo válido de energía contratada.")
 
+    
     if arch2 is not None:
         precios = carga_archivos(arch2, arch2.name, ph_alerta_2)
     else:
         precios = pd.DataFrame()  # Valor predeterminado si no hay archivo
 
     if precios.empty:
-        ph_alerta_2.warning(":warning: Por favor, sube un archivo válido de precios de contrato.")
+        ph_alerta_2.warning(":warning: Por favor, carga un archivo válido de precios de contrato.")
 
-    if not kw.empty and not precios.empty:
+    
+    if arch3 is not None:
+        BD_PSI = carga_FactorPSI(arch3, ph_alerta_3)
+    else:
+        BD_PSI = pd.DataFrame()  # Valor predeterminado si no hay archivo
+
+    if BD_PSI.empty:
+        ph_alerta_3.warning(":warning: Por favor, carga un archivo válido de hidrología.")
+
+
+    if not kw.empty and not precios.empty and not BD_PSI.empty:
         if 'Contratos' not in st.session_state:
             BD_con = gen_BD_Contratos(kw,precios)
             datosHis = carga_historicos()
             BD_prev = unif_BD_contratos(datosHis,BD_con)
             contratos = preparar_BD_IA(BD_prev)
-            BD_PSI = carga_FactorPSI()
+            #BD_PSI = carga_FactorPSI()
             contratos_PSI = transfer_PSI_columns(BD_PSI,contratos)
             st.session_state['Contratos'] = contratos_PSI
         contratos_f2 = st.session_state['Contratos']
@@ -279,11 +300,11 @@ def main():
             col1, col2 = st.columns([3,3])
             plazo_ejec = col1.slider('🗓️ Inicio del contrato (Años)', 0, 15, 15, key='plazo_uni')
             duracion_cu = col2.slider('⏳ Duración (Años)', 0, 15, 15, key='duracion_uni')
-            aportes_cu = (col1.slider('🌧️ Aportes (%)', -100.0, 100.0, 0.0, key='aportes_uni')/100) + 1
+            aportes_cu = (col1.slider('🌧️ Aportes sobre la media (%)', -100.0, 100.0, 0.0, key='aportes_uni')/100) + 1
             volumen_cu = col2.slider('💧⚡ Volumen útil embalses (%)', 0.0, 100.0, 50.0, key='volumen_uni')/100
             energia_cu = col1.number_input("⚡ Energía a contratar (GWh)",key='precio_input_uni', min_value=0.00000,step=0.00001,format="%.5f")
             pBolsa_cu = col2.number_input("💲⚡ Precio de bolsa (COP/kWh)",key='pbolsa_input_uni', min_value=0.00,step=0.01,format="%.2f")
-          
+
             if energia_cu > 0:
                 if pBolsa_cu > 0:
                     pron_up, pron_down = pronostico(modelo,pd.DataFrame([[energia_cu,plazo_ejec,duracion_cu,aportes_cu,volumen_cu,pBolsa_cu]],
@@ -294,20 +315,20 @@ def main():
             else:
                 st.warning(":warning:⚡ Por favor, ingrese una cantidad de energía a contratar válida.")
                 pron_up, pron_down = round(0.00,2), round(0.00,2)
-            
+
             st.divider()
             mensaje = '📊 Información: Pronóstico de Contrato'
             st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
             col3, col4 = st.columns([3,3])
             col4.metric(':arrow_up:💲Precio máximo de firma (COP/kWh)', round(pron_up,2))
             col3.metric(':arrow_down:💲Precio mínimo de firma (COP/kWh)', round(pron_down,2))
-            
-        
+
+
         with tab1.container(key='cont-result-2'):
             mensaje = '📋 Condiciones del Contrato'
             st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
             col7,col8 = st.columns([1,1])
-            aportes_g = (col7.slider('🌧️ Aportes (%)', -100.0, 100.0, 0.0, key='aportes-gra')/100)+1
+            aportes_g = (col7.slider('🌧️ Aportes sobre la media (%)', -100.0, 100.0, 0.0, key='aportes-gra')/100)+1
             volumen_g = col8.slider('💧⚡ Volumen útil embalses (%)', 0.0, 100.0, 50.0, key='volumen-gra')/100
             energia_g = col7.number_input("⚡ Energía a contratar (GWh)",key='precio-input-gra', min_value=0.00000,step=0.00001,format="%.5f")
             pBolsa_g = col8.number_input("💲⚡ Precio de bolsa (COP/kWh)",key='pbolsa-input-gra', min_value=0.00,step=0.01,format="%.2f")
