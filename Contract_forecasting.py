@@ -300,7 +300,7 @@ def main():
             col1, col2 = st.columns([3,3])
             plazo_ejec = col1.slider('🗓️ Inicio del contrato (Años)', 0, 15, 15, key='plazo_uni')
             duracion_cu = col2.slider('⏳ Duración (Años)', 0, 15, 15, key='duracion_uni')
-            aportes_cu = col1.slider('🌧️ Aportes sobre la media (%)', -100.0, 100.0, 0.0, key='aportes-uni')/100)+1
+            aportes_cu = (col1.slider('🌧️ Aportes sobre la media (%)', -100.0, 100.0, 0.0, key='aportes-uni')/100)+1
             volumen_cu = col2.slider('💧⚡ Volumen útil embalses (%)', 0.0, 100.0, 50.0, key='volumen_uni')/100
             energia_cu = col1.number_input("⚡ Energía a contratar por contrato (GWh)",key='precio_input_uni', min_value=0.00,step=0.01,format="%.2f")
             pBolsa_cu = col2.number_input("💲⚡ Precio de bolsa (COP/kWh)",key='pbolsa_input_uni', min_value=0.00,step=0.01,format="%.2f")
