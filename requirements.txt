@@ -3,5 +3,5 @@ pandas
 plotly
 streamlit
 scipy
-Scikit-learn
+scikit-learn
 xgboost
