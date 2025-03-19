@@ -75,7 +75,7 @@ def preparar_BD_IA(data):
       AÑO_FIRMA = ('PERIODO_ADJ',lambda x: x.min().year),
       MES_FIRMA = ('PERIODO_ADJ',lambda x: x.min().month),
       AÑO_EJECUCION = ('FECHA',lambda x: x.min().year),
-      GW_TOTAL = ('KW', lambda x: x.sum() / 1e9),
+      GW_TOTAL = ('KW', lambda x: x.sum() / 1e6),
       PLAZO = ('FECHA', lambda x: int(round(abs(((x.min() - data.loc[x.index,'PERIODO_ADJ'].min()).days) / 365.25 )))),
       DURACION = ('FECHA', lambda x: int(round(abs((x.max() - x.min()).days) / 365.25))),
       PRECIO_CONTRATO = ('PRECIO', lambda x: round((x * data.loc[x.index, 'KW']).sum() / data.loc[x.index, 'KW'].sum(), 2))
@@ -293,7 +293,7 @@ def main():
         elif alpha_lit == 'Bajo':
             alpha = 0.5
         modelo, t_c, std = entrenar(contratos_f2,alpha)
-        tab1, tab2 = st.tabs(["📈 Valoración de MC","📊 Valoración Precio de Contratos"])
+        tab1, tab2 = st.tabs(["📈 Valoración de Energía por Contratos","📊 Valoración Precio de Contratos"])
         with tab2.container(key='cont-result'):
             mensaje = '📋 Condiciones del Contrato'
             st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
@@ -302,7 +302,7 @@ def main():
             duracion_cu = col2.slider('⏳ Duración (Años)', 0, 15, 15, key='duracion_uni')
             aportes_cu = (col1.slider('🌧️ Aportes sobre la media (%)', -100.0, 100.0, 0.0, key='aportes_uni')/100) + 1
             volumen_cu = col2.slider('💧⚡ Volumen útil embalses (%)', 0.0, 100.0, 50.0, key='volumen_uni')/100
-            energia_cu = col1.number_input("⚡ Energía a contratar (GWh)",key='precio_input_uni', min_value=0.00000,step=0.00001,format="%.5f")
+            energia_cu = col1.number_input("⚡ Energía a contratar por contrato (GWh)",key='precio_input_uni', min_value=0.00,step=0.01,format="%.5f")
             pBolsa_cu = col2.number_input("💲⚡ Precio de bolsa (COP/kWh)",key='pbolsa_input_uni', min_value=0.00,step=0.01,format="%.2f")
 
             if energia_cu > 0:
@@ -330,7 +330,7 @@ def main():
             col7,col8 = st.columns([1,1])
             aportes_g = (col7.slider('🌧️ Aportes sobre la media (%)', -100.0, 100.0, 0.0, key='aportes-gra')/100)+1
             volumen_g = col8.slider('💧⚡ Volumen útil embalses (%)', 0.0, 100.0, 50.0, key='volumen-gra')/100
-            energia_g = col7.number_input("⚡ Energía a contratar (GWh)",key='precio-input-gra', min_value=0.00000,step=0.00001,format="%.5f")
+            energia_g = col7.number_input("⚡ Energía a contratar por contrato (GWh)",key='precio-input-gra', min_value=0.00,step=0.01,format="%.5f")
             pBolsa_g = col8.number_input("💲⚡ Precio de bolsa (COP/kWh)",key='pbolsa-input-gra', min_value=0.00,step=0.01,format="%.2f")
             if energia_g > 0:
                 if pBolsa_g > 0:
