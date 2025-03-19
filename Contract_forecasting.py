@@ -329,7 +329,7 @@ def main():
             mensaje = '📋 Condiciones del Contrato'
             st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
             col7,col8 = st.columns([1,1])
-            aportes_g = (col7.slider('🌧️ Aportes sobre la media (%)', -100.0, 100.0, 0.0, key='aportes-gra')/100)+1
+            aportes_g = col7.slider('🌧️ Aportes sobre la media (%)', 0.0, 200.0, 100.0, key='aportes-gra')/100
             volumen_g = col8.slider('💧⚡ Volumen útil embalses (%)', 0.0, 100.0, 50.0, key='volumen-gra')/100
             energia_g = col7.number_input("⚡ Energía a contratar por contrato (GWh)",key='precio-input-gra', min_value=0.00,step=0.01,format="%.2f")
             pBolsa_g = col8.number_input("💲⚡ Precio de bolsa (COP/kWh)",key='pbolsa-input-gra', min_value=0.00,step=0.01,format="%.2f")
