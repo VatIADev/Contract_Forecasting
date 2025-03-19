@@ -105,7 +105,7 @@ def entrenar(datos,alpha):
 
     estimadores = [('xgb', xgb_r), ('mlp', modelo_mlp)]
     stacking_reg = StackingRegressor(estimators=estimadores, final_estimator=meta_modelo)
-    stacking_reg.fit(X_train, y_train)
+    stacking_reg.fit(X, y)
     #xgb_r.fit(X, y)
     pred_train = stacking_reg.predict(X)
     residuos = pred_train - y.values
