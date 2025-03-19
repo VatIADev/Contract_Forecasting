@@ -124,7 +124,7 @@ def graficar(resultados):
     fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_max'], mode='lines+markers', marker=dict(size=10,color='rgba (174, 234, 0, 1)', opacity=0.8),
                              line=dict(width=3, color='rgba (174, 234, 0, 1)', dash='dash'), name='', showlegend=False))
     fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_min'], mode='lines+markers', marker=dict(size=10,color='rgba (174, 234, 0, 1)', opacity=0.8),
-                             fill='tonexty', line=dict(width=3, color='rgba (174, 234, 0, 1)', dash='dash'), name='Valoración MC', fillcolor='rgba(9, 90, 129, 0.5)'))
+                             fill='tonexty', line=dict(width=3, color='rgba (174, 234, 0, 1)', dash='dash'), name='Valoración de energía por contrato', fillcolor='rgba(9, 90, 129, 0.5)'))
     fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_min']-21, mode='lines+markers', marker=dict(size=10,color='rgba (234, 154, 0, 1)', opacity=0.8),
                              line=dict(width=3, color='rgba (234, 154, 0, 1)', dash='dash'), name='Valoración Mercado No Regulado'))
     fig.update_xaxes(showline=True, linewidth=2, linecolor='white', gridcolor='lightgray', mirror=False, tickfont_color='white',
