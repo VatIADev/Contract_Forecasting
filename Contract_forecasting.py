@@ -291,6 +291,7 @@ def main():
             contratos = preparar_BD_IA(BD_prev)
             #BD_PSI = carga_FactorPSI()
             contratos_PSI = transfer_PSI_columns(BD_PSI,contratos)
+            contratos_PSI.dropna(inplace=True,axis=0)
             st.session_state['Contratos'] = contratos_PSI
         contratos_f2 = st.session_state['Contratos']
         contenedor = st.container(key='cont-maestro')
