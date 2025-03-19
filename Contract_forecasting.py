@@ -298,7 +298,7 @@ def main():
         alpha_lit = contenedor.selectbox(':dart: Rango de Precisión', ['Alto','Medio','Bajo'],key='alpha-sel')
         st.markdown('<br>', unsafe_allow_html=True)
         if alpha_lit == 'Alto':
-            alpha = 0.85
+            alpha = 0.9
         elif alpha_lit == 'Medio':
             alpha = 0.7
         elif alpha_lit == 'Bajo':
