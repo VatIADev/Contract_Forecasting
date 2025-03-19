@@ -96,17 +96,15 @@ def transfer_PSI_columns(df1, df2):
 @st.cache_data
 def entrenar(datos,alpha):
     X, y = datos[['GW_TOTAL','PLAZO','DURACION','APORTES', 'VOLUMEN_UTIL', 'PROM_PRECIO_BOLSA']], datos['PRECIO_CONTRATO']
-    xgb_r = xg.XGBRegressor(objective ='reg:squarederror',tree_method="hist",
-                        eval_metric=mean_absolute_percentage_error,n_estimators = 100,
-                        seed = 42, learning_rate=0.025)
-    modelo_mlp = MLPRegressor(hidden_layer_sizes=(30,20), activation='relu',validation_fraction=0.2,
-                          solver='adam', max_iter=300, random_state=42, early_stopping=True)
+    xgb_r = xg.XGBRegressor(objective ='reg:squarederror',tree_method="hist", eval_metric=mean_absolute_percentage_error,n_estimators = 100,
+                            seed = 42, learning_rate=0.025)
+    modelo_mlp = MLPRegressor(hidden_layer_sizes=(18,18), activation='relu',validation_fraction=0.2,
+                          solver='adam', max_iter=350, random_state=42, early_stopping=True)
     meta_modelo = KernelRidge(alpha=0.5, kernel='rbf', gamma=1.5e-3)
 
     estimadores = [('xgb', xgb_r), ('mlp', modelo_mlp)]
     stacking_reg = StackingRegressor(estimators=estimadores, final_estimator=meta_modelo)
     stacking_reg.fit(X, y)
-    #xgb_r.fit(X, y)
     pred_train = stacking_reg.predict(X)
     residuos = pred_train - y.values
     std_error = np.std(residuos, ddof=1)
