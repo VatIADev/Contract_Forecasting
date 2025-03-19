@@ -100,7 +100,7 @@ def entrenar(datos,alpha):
                         eval_metric=mean_absolute_percentage_error,n_estimators = 100,
                         seed = 42, learning_rate=0.025)
     modelo_mlp = MLPRegressor(hidden_layer_sizes=(30,20), activation='relu',validation_fraction=0.2,
-                          solver='adam', max_iter=500, random_state=42)
+                          solver='adam', max_iter=300, random_state=42, early_stopping=True)
     meta_modelo = KernelRidge(alpha=0.5, kernel='rbf', gamma=1.5e-3)
 
     estimadores = [('xgb', xgb_r), ('mlp', modelo_mlp)]
@@ -298,11 +298,11 @@ def main():
         alpha_lit = contenedor.selectbox(':dart: Rango de Precisión', ['Alto','Medio','Bajo'],key='alpha-sel')
         st.markdown('<br>', unsafe_allow_html=True)
         if alpha_lit == 'Alto':
-            alpha = 0.92
+            alpha = 0.95
         elif alpha_lit == 'Medio':
-            alpha = 0.72
+            alpha = 0.75
         elif alpha_lit == 'Bajo':
-            alpha = 0.52
+            alpha = 0.55
         modelo, t_c, std = entrenar(contratos_f2,alpha)
         tab1, tab2 = st.tabs(["📈 Valoración de Energía por Contratos","📊 Valoración Precio de Contratos"])
         with tab2.container(key='cont-result'):
