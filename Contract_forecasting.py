@@ -112,7 +112,7 @@ def entrenar(datos,alpha):
     std_error = np.std(residuos, ddof=1)
     n = len(X)
     t_critical = stats.t.ppf(1 - alpha/2, df=n-1)
-    return xgb_r, t_critical, std_error
+    return stacking_reg, t_critical, std_error
 
 def pronostico(modelo,datos,t_crit,std):
     pred_test = modelo.predict(datos)
