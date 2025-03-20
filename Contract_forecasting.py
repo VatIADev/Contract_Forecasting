@@ -97,12 +97,12 @@ def entrenar(datos,alpha):
     X, y = datos[['GW_TOTAL','PLAZO','DURACION','APORTES', 'VOLUMEN_UTIL', 'PROM_PRECIO_BOLSA']], datos['PRECIO_CONTRATO']
     xgb_r = xg.XGBRegressor(objective ='reg:squarederror',tree_method="hist", eval_metric=mean_absolute_percentage_error,n_estimators = 100,
                             seed = 42, learning_rate=0.025)
-    xgb_r.fit(X_train, y_train)
+    xgb_r.fit(X, y)
     krr_model = KernelRidge(kernel='rbf', alpha=0.1, gamma=5e-5)
-    krr_model.fit(X_train, y_train)
+    krr_model.fit(X, y)
     w = 0.45
     voting_reg = VotingRegressor(estimators=[('xgb', xgb_r), ('krr', krr_model)], weights=[w, 1-w])
-    voting_reg.fit(X_train, y_train)
+    voting_reg.fit(X, y)
     pred_train = voting_reg.predict(X)
     residuos = pred_train - y.values
     std_error = np.std(residuos, ddof=1)
