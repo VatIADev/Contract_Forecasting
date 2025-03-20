@@ -294,11 +294,11 @@ def main():
         alpha_lit = contenedor.selectbox(':dart: Rango de Precisión', ['Alto','Medio','Bajo'],key='alpha-sel')
         st.markdown('<br>', unsafe_allow_html=True)
         if alpha_lit == 'Alto':
-            alpha = 0.95
+            alpha = 0.9
         elif alpha_lit == 'Medio':
-            alpha = 0.75
+            alpha = 0.7
         elif alpha_lit == 'Bajo':
-            alpha = 0.55
+            alpha = 0.5
         modelo, t_c, std = entrenar(contratos_f2,alpha)
         tab1, tab2 = st.tabs(["📈 Valoración de Energía por Contratos","📊 Valoración Precio de Contratos"])
         with tab2.container(key='cont-result'):
