@@ -6,9 +6,8 @@ import xgboost as xg
 import scipy.stats as stats
 from sklearn.metrics import root_mean_squared_error, mean_absolute_error, mean_absolute_percentage_error
 from datetime import datetime
-from sklearn.neural_network import MLPRegressor
 from sklearn.kernel_ridge import KernelRidge
-from sklearn.ensemble import StackingRegressor
+from sklearn.ensemble import VotingRegressor
 
 def crear_placeholder():
     placeholder = st.sidebar.empty()  # Crear un placeholder vacío
@@ -98,21 +97,18 @@ def entrenar(datos,alpha):
     X, y = datos[['GW_TOTAL','PLAZO','DURACION','APORTES', 'VOLUMEN_UTIL', 'PROM_PRECIO_BOLSA']], datos['PRECIO_CONTRATO']
     xgb_r = xg.XGBRegressor(objective ='reg:squarederror',tree_method="hist", eval_metric=mean_absolute_percentage_error,n_estimators = 100,
                             seed = 42, learning_rate=0.025)
-    modelo_mlp = MLPRegressor(hidden_layer_sizes=(12,8), activation='relu',validation_fraction=0.2, learning_rate='adaptive',
-                          early_stopping=True, solver='adam', max_iter=300, random_state=42, tol=1e-6)
-
-    meta_modelo = MLPRegressor(hidden_layer_sizes=(7,3), activation='relu',validation_fraction=0.2, learning_rate='adaptive',
-                           early_stopping=True, solver='adam', max_iter=300, random_state=42, tol=1e-6)
-
-    estimadores = [('xgb', xgb_r), ('mlp', modelo_mlp)]
-    stacking_reg = StackingRegressor(estimators=estimadores, final_estimator=meta_modelo)
-    stacking_reg.fit(X, y)
-    pred_train = stacking_reg.predict(X)
+    xgb_r.fit(X_train, y_train)
+    krr_model = KernelRidge(kernel='rbf', alpha=0.1, gamma=5e-5)
+    krr_model.fit(X_train, y_train)
+    w = 0.45
+    voting_reg = VotingRegressor(estimators=[('xgb', xgb_r), ('krr', krr_model)], weights=[w, 1-w])
+    voting_reg.fit(X_train, y_train)
+    pred_train = voting_reg.predict(X)
     residuos = pred_train - y.values
     std_error = np.std(residuos, ddof=1)
     n = len(X)
     t_critical = stats.t.ppf(1 - alpha/2, df=n-1)
-    return stacking_reg, t_critical, std_error
+    return voting_reg, t_critical, std_error
 
 def pronostico(modelo,datos,t_crit,std):
     pred_test = modelo.predict(datos)
