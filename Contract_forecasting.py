@@ -95,8 +95,8 @@ def transfer_PSI_columns(df1, df2):
 @st.cache_data
 def entrenar(datos,alpha):
     X, y = datos[['GW_TOTAL','PLAZO','DURACION','APORTES', 'VOLUMEN_UTIL', 'PROM_PRECIO_BOLSA']], datos['PRECIO_CONTRATO']
-    xgb_r = xg.XGBRegressor(objective ='reg:squarederror',tree_method="hist", eval_metric=mean_absolute_percentage_error,n_estimators = 100,
-                            seed = 42, learning_rate=0.025)
+    xgb_r = xg.XGBRegressor(objective ='reg:squarederror', tree_method="hist", eval_metric=mean_absolute_percentage_error,n_estimators = 100,
+                            seed = 42, learning_rate=0.025, n_jobs=-1)
     xgb_r.fit(X, y)
     krr_model = KernelRidge(kernel='rbf', alpha=0.1, gamma=5e-5)
     krr_model.fit(X, y)
