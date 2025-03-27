@@ -9,9 +9,33 @@ from datetime import datetime
 from sklearn.kernel_ridge import KernelRidge
 from sklearn.ensemble import VotingRegressor
 
-def crear_placeholder():
-    placeholder = st.sidebar.empty()  # Crear un placeholder vacío
+if "archivo_cargado_MNR" not in st.session_state:
+    st.session_state.archivo_cargado_MNR = False
+
+if "archivo_cargado_MR" not in st.session_state:
+    st.session_state.archivo_cargado_MR = False
+
+if 'rerun_done' not in st.session_state:
+    st.session_state.rerun_done = False
+
+def crear_placeholder(container):
+    placeholder = container.empty()  # Crear un placeholder vacío
     return placeholder
+
+def limpiar_col_monet(df):
+    for col in df.columns:
+        if df[col].dtype == 'object':
+            if df[col].dropna().astype(str).str.contains('\$').any():
+                df[col] = df[col].replace({'\$': '', ',': ''}, regex=True)
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+    return df
+
+def dif_MR_MNR(df, col1, col2, tw=0):
+    if tw > 0:
+        df = df.tail(tw)
+    else:
+        df = df
+    return (df[col1] - df[col2]).mean()
 
 @st.cache_data
 def carga_historicos():
@@ -22,14 +46,24 @@ def carga_historicos():
     return datosHis
 
 def carga_FactorPSI(archivo, _alerta):
-  required_columns = ['AÑO','MES','PROM_PRECIO_BOLSA','APORTES','VOLUMEN_UTIL']
-  datosPSI = pd.read_csv(archivo, sep=';', header=0, low_memory=False)
-  missing_columns = [col for col in required_columns if col not in datosPSI.columns]
-  if not missing_columns:
-      _alerta.success(":heavy_check_mark: 💧 Base de datos de hidrología cargada correctamente")  
-  else:
-      return pd.DataFrame()
-  return datosPSI
+    required_columns = ['AÑO','MES','PROM_PRECIO_BOLSA','APORTES','VOLUMEN_UTIL']
+    datosPSI = pd.read_csv(archivo, sep=';', header=0, low_memory=False)
+    missing_columns = [col for col in required_columns if col not in datosPSI.columns]
+    if not missing_columns:
+        _alerta.success(":heavy_check_mark: 💧 Base de datos de hidrología cargada correctamente")
+    else:
+        return pd.DataFrame()
+    return datosPSI
+
+def carga_MNR(archivo, _alerta):
+    required_columns = ['Año','Mes','MC','Precio Promedio Contratos No Regulados']
+    datosMNR = pd.read_csv(archivo, sep=';', header=0, low_memory=False)
+    missing_columns = [col for col in required_columns if col not in datosMNR.columns]
+    if not missing_columns:
+        _alerta.success(":heavy_check_mark: 💲 Base de datos MNR cargada correctamente")
+    else:
+        return pd.DataFrame()
+    return datosMNR
 
 def carga_archivos(archivo, nombre, _alerta):
     required_columns = ['CONTRATO','ADJUDICACION','VALOR','FECHA']
@@ -125,13 +159,13 @@ def totales(datos, modelo, t_c, std, energia, duracion, aportes, vol_util, PPB):
         resultados[plazo, 0], resultados[plazo, 1], resultados[plazo, 2] = año_actual + plazo, fore_up, fore_down
     return pd.DataFrame(resultados, columns=['ds', 'p_max', 'p_min'])
 
-def graficar(resultados):
+def graficar(resultados, dif_MNR):
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_max'], mode='lines+markers', marker=dict(size=10,color='rgba (174, 234, 0, 1)', opacity=0.8),
                              line=dict(width=3, color='rgba (174, 234, 0, 1)', dash='dash'), name='', showlegend=False))
     fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_min'], mode='lines+markers', marker=dict(size=10,color='rgba (174, 234, 0, 1)', opacity=0.8),
                              fill='tonexty', line=dict(width=3, color='rgba (174, 234, 0, 1)', dash='dash'), name='Valoración de energía por contrato', fillcolor='rgba(9, 90, 129, 0.5)'))
-    fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_min']-21, mode='lines+markers', marker=dict(size=10,color='rgba (234, 154, 0, 1)', opacity=0.8),
+    fig.add_trace(go.Scatter(x=resultados['ds'], y=resultados['p_min']-dif_MNR, mode='lines+markers', marker=dict(size=10,color='rgba (234, 154, 0, 1)', opacity=0.8),
                              line=dict(width=3, color='rgba (234, 154, 0, 1)', dash='dash'), name='Valoración Mercado No Regulado'))
     fig.update_xaxes(showline=True, linewidth=2, linecolor='white', gridcolor='lightgray', mirror=False, tickfont_color='white',
                      title_text='<b>Año</b>', tickformat="%b %Y", tickfont_size=16, title_font_color='white',)
@@ -184,7 +218,7 @@ def estilo():
             }
 
             hr:nth-of-type(1) {
-                width: 95% !important;
+                width: 100% !important;
             }
 
             div[data-testid="stSelectbox"], div[data-testid="stAlert"] {
@@ -192,7 +226,7 @@ def estilo():
                 padding: 0px;              /* Añadir algo de padding */
                 color: white;               /* Cambiar color del texto a blanco */
                 font-family: 'Prompt', sans-serif !important;
-                width: 95% !important;
+                width: 100% !important;
             }
 
             [data-testid="stSidebar"] img {
@@ -226,130 +260,150 @@ def estilo():
                 font-size:18px!important;
                 font-weight: bold;
             }
-      </style>
+
+            [data-testid='stFileUploaderDropzoneInstructions'] > div:{
+                content: 'Arrastre aquí los archivos';
+            }
+
+            [data-testid='stBaseButton-secondary'] {
+                text-indent: -9999px; line-height: 0;
+            }
+
+            [data-testid='stBaseButton-secondary']::after { line-height: initial;
+                content: "Cargar"; text-indent: 0;
+            }
+
+            .st-key-styled_expander details,
+            .st-key-styled_expander_2 details {
+                border-color: green;
+            }
+            .st-key-styled_expander summary,
+            .st-key-styled_expander_2 summary {
+                border-radius: .5rem;
+            }
+
+            .st-key-styled_expander svg[data-testid="stExpanderToggleIcon"],
+            .st-key-styled_expander_2 svg[data-testid="stExpanderToggleIcon"] {
+                color: white;
+            }
+
+            .st-key-styled_expander div[data-testid="stExpanderDetails"] p h1,
+            .st-key-styled_expander_2 div[data-testid="stExpanderDetails"] p h1{
+                color: white;
+            }
+            </style>
       """, unsafe_allow_html=True)
 
 def main():
-    st.set_page_config(page_title="Pronóstico Contratos Vatia",page_icon="images/icon.png",layout="wide")
+    st.set_page_config(page_title="Pronóstico Contratos Vatia", page_icon="images/icon.png", layout="wide")
     estilo()
-    color_dinamico = "#aeea00" #Verde Manzana
-    est_pron = False
-    st.sidebar.image("images/LogoVatia.png",caption="",use_container_width=True)
+    color_dinamico = "#aeea00"  # Verde Manzana
+
     st.sidebar.divider()
     st.header("Pronósticos Contratos")
-    st.markdown('<br>', unsafe_allow_html=True)
-    st.sidebar.write('**🚨 Notificaciones**')
-    ph_alerta_1 = crear_placeholder()
-    ph_alerta_2 = crear_placeholder()
-    ph_alerta_3 = crear_placeholder()
-    st.markdown('<br>', unsafe_allow_html=True)
+    #st.sidebar.image("images/LogoVatia.png",caption="",use_container_width=True)
+    
+    # Sección de notificaciones (4 placeholders)
+    exp_notif = st.sidebar.container(key="styled_expander").expander("**🚨 Notificaciones**", expanded=True)
+    ph_alerta = [crear_placeholder(exp_notif) for _ in range(4)]
     st.sidebar.divider()
-    st.sidebar.write('**📤📋 Cargar históricos de contratos**')
-    ph_carga_1 = crear_placeholder()
-    ph_carga_2 = crear_placeholder()
-    ph_carga_3 = crear_placeholder()
-    arch1 = ph_carga_1.file_uploader(':zap: Energía', type='csv', key='kw_up')
-    arch2 = ph_carga_2.file_uploader(':heavy_dollar_sign: Precios de contratos', type='csv', key='precios_up')
-    arch3 = ph_carga_3.file_uploader(':heavy_dollar_sign:💧 Precio de bolsa e hidrología', type='csv', key='PB_hidro')
 
-    if arch1 is not None:
-        kw = carga_archivos(arch1, arch1.name, ph_alerta_1)
-    else:
-        kw = pd.DataFrame()  # Valor predeterminado si no hay archivo
+    # Sección Históricos MR
+    cont_mr = st.sidebar.container(key="styled_expander_2")
+    exp_mr = cont_mr.expander("**📤📋 Históricos (MR)**", expanded=not st.session_state.archivo_cargado_MR)
+    exp_mr.markdown(
+        "**Por favor, cargar la siguiente información:**\n- 💲 Precios por contrato\n- ⚡ Energía pactada por contrato\n- 💧 Hidrología y Precio de Bolsa"
+    )
+    archivos = crear_placeholder(exp_mr).file_uploader('', type='csv', key='kw_up', accept_multiple_files=True)
 
-    if kw.empty:
-        ph_alerta_1.warning(":warning: Por favor, carga un archivo válido de energía contratada.")
+    # Sección Históricos MNR
+    exp_mnr = cont_mr.expander("**📤📋 Históricos (MNR)**", expanded=not st.session_state.archivo_cargado_MNR)
+    exp_mnr.markdown("**Por favor, cargar la siguiente información:**\n- 💲 Precios MNR")
+    arch_MNR = crear_placeholder(exp_mnr).file_uploader('', type='csv', key='kw_MNR')
 
+    # Seleccionar archivos para MR según nombre
+    arch1 = arch2 = arch3 = None
+    if archivos:
+        for f in archivos:
+            n = f.name.lower()
+            if "kw" in n:
+                arch1 = f
+            elif "precio" in n:
+                arch2 = f
+            elif "pb_hidro" in n:
+                arch3 = f
+
+    kw = carga_archivos(arch1, arch1.name, ph_alerta[0]) if arch1 else pd.DataFrame()
+    if kw.empty: ph_alerta[0].warning(":warning: Por favor, carga un archivo válido de energía contratada.")
+    precios = carga_archivos(arch2, arch2.name, ph_alerta[1]) if arch2 else pd.DataFrame()
+    if precios.empty: ph_alerta[1].warning(":warning: Por favor, carga un archivo válido de precios de contrato.")
+    BD_PSI = carga_FactorPSI(arch3, ph_alerta[2]) if arch3 else pd.DataFrame()
+    if BD_PSI.empty: ph_alerta[2].warning(":warning: Por favor, carga un archivo válido de hidrología.")
     
-    if arch2 is not None:
-        precios = carga_archivos(arch2, arch2.name, ph_alerta_2)
-    else:
-        precios = pd.DataFrame()  # Valor predeterminado si no hay archivo
+    if arch1 and arch2 and arch3: 
+      st.session_state.archivo_cargado_MR = True
 
-    if precios.empty:
-        ph_alerta_2.warning(":warning: Por favor, carga un archivo válido de precios de contrato.")
+    BD_MNR = limpiar_col_monet(carga_MNR(arch_MNR, ph_alerta[3])) if arch_MNR else pd.DataFrame()
+    if arch_MNR: 
+      st.session_state.archivo_cargado_MNR = True
 
-    
-    if arch3 is not None:
-        BD_PSI = carga_FactorPSI(arch3, ph_alerta_3)
-    else:
-        BD_PSI = pd.DataFrame()  # Valor predeterminado si no hay archivo
+    if BD_MNR.empty: ph_alerta[3].warning(":warning: Por favor, carga un archivo válido de historicos de MNR.")
 
-    if BD_PSI.empty:
-        ph_alerta_3.warning(":warning: Por favor, carga un archivo válido de hidrología.")
-
-
-    if not kw.empty and not precios.empty and not BD_PSI.empty:
+    if not kw.empty and not precios.empty and not BD_PSI.empty and not BD_MNR.empty:
+        if not st.session_state.rerun_done:
+            st.session_state.rerun_done = True
+            st.rerun()
         if 'Contratos' not in st.session_state:
-            BD_con = gen_BD_Contratos(kw,precios)
-            datosHis = carga_historicos()
-            BD_prev = unif_BD_contratos(datosHis,BD_con)
+            BD_con = gen_BD_Contratos(kw, precios)
+            BD_prev = unif_BD_contratos(carga_historicos(), BD_con)
             contratos = preparar_BD_IA(BD_prev)
-            #BD_PSI = carga_FactorPSI()
-            contratos_PSI = transfer_PSI_columns(BD_PSI,contratos)
-            contratos_PSI.dropna(inplace=True,axis=0)
+            contratos_PSI = transfer_PSI_columns(BD_PSI, contratos)
+            contratos_PSI.dropna(inplace=True)
             st.session_state['Contratos'] = contratos_PSI
+
         contratos_f2 = st.session_state['Contratos']
         contenedor = st.container(key='cont-maestro')
-        alpha_lit = contenedor.selectbox(':dart: Rango de Precisión', ['Alto','Medio','Bajo'],key='alpha-sel')
+        alpha_lit = contenedor.selectbox(':dart: Rango de Precisión', ['Alto', 'Medio', 'Bajo'], key='alpha-sel')
         st.markdown('<br>', unsafe_allow_html=True)
-        if alpha_lit == 'Alto':
-            alpha = 0.9
-        elif alpha_lit == 'Medio':
-            alpha = 0.7
-        elif alpha_lit == 'Bajo':
-            alpha = 0.5
-        modelo, t_c, std = entrenar(contratos_f2,alpha)
-        tab1, tab2 = st.tabs(["📈 Valoración de Energía por Contratos","📊 Valoración Precio de Contratos"])
+        alpha = 0.9 if alpha_lit == 'Alto' else 0.7 if alpha_lit == 'Medio' else 0.5
+        modelo, t_c, std = entrenar(contratos_f2, alpha)
+        tab1, tab2 = st.tabs(["📈 Valoración de Energía por Contratos", "📊 Valoración Precio de Contratos"])
+        
         with tab2.container(key='cont-result'):
-            mensaje = '📋 Condiciones del Contrato'
-            st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
-            col1, col2 = st.columns([3,3])
+            st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📋 Condiciones del Contrato</p>', unsafe_allow_html=True)
+            col1, col2 = st.columns(2)
             plazo_ejec = col1.slider('🗓️ Inicio del contrato (Años)', 0, 15, 15, key='plazo_uni')
             duracion_cu = col2.slider('⏳ Duración (Años)', 0, 15, 15, key='duracion_uni')
-            aportes_cu = col1.slider('🌧️ Aportes sobre la media (%)', 0.0, 200.0, 100.0, key='aportes-uni')/100
-            
-            volumen_cu = col2.slider('💧⚡ Volumen útil embalses (%)', 0.0, 100.0, 50.0, key='volumen_uni')/100
-            energia_cu = col1.number_input("⚡ Energía a contratar por contrato (GWh)",key='precio_input_uni', min_value=0.00,step=0.01,format="%.2f")
-            pBolsa_cu = col2.number_input("💲⚡ Precio de bolsa (COP/kWh)",key='pbolsa_input_uni', min_value=0.00,step=0.01,format="%.2f")
-
-            if energia_cu > 0:
-                if pBolsa_cu > 0:
-                    pron_up, pron_down = pronostico(modelo,pd.DataFrame([[energia_cu,plazo_ejec,duracion_cu,aportes_cu,volumen_cu,pBolsa_cu]],
-                                                                        columns=['GW_TOTAL','PLAZO','DURACION','APORTES', 'VOLUMEN_UTIL', 'PROM_PRECIO_BOLSA']),t_c,std)
-                else:
-                    st.warning(":warning:💲 Por favor, ingrese un precio de bolsa válido.")
-                    pron_up, pron_down = round(0.00,2), round(0.00,2)
+            aportes_cu = col1.slider('🌧️ Aportes sobre la media (%)', 0.0, 200.0, 100.0, key='aportes-uni') / 100
+            volumen_cu = col2.slider('💧⚡ Volumen útil embalses (%)', 0.0, 100.0, 50.0, key='volumen_uni') / 100
+            energia_cu = col1.number_input("⚡ Energía a contratar por contrato (GWh)", key='precio_input_uni', min_value=0.00, step=0.01, format="%.2f")
+            pBolsa_cu = col2.number_input("💲⚡ Precio de bolsa (COP/kWh)", key='pbolsa_input_uni', min_value=0.00, step=0.01, format="%.2f")
+            if energia_cu > 0 and pBolsa_cu > 0:
+                df_input = pd.DataFrame([[energia_cu, plazo_ejec, duracion_cu, aportes_cu, volumen_cu, pBolsa_cu]],
+                                        columns=['GW_TOTAL','PLAZO','DURACION','APORTES','VOLUMEN_UTIL','PROM_PRECIO_BOLSA'])
+                pron_up, pron_down = pronostico(modelo, df_input, t_c, std)
             else:
-                st.warning(":warning:⚡ Por favor, ingrese una cantidad de energía a contratar válida.")
-                pron_up, pron_down = round(0.00,2), round(0.00,2)
-
+                st.warning(":warning: Ingrese valores válidos para energía y precio de bolsa.")
+                pron_up, pron_down = 0.00, 0.00
             st.divider()
-            mensaje = '📊 Información: Pronóstico de Contrato'
-            st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
-            col3, col4 = st.columns([3,3])
-            col4.metric(':arrow_up:💲Precio máximo de firma (COP/kWh)', round(pron_up,2))
-            col3.metric(':arrow_down:💲Precio mínimo de firma (COP/kWh)', round(pron_down,2))
-
-
+            st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📊 Información: Pronóstico de Contrato</p>', unsafe_allow_html=True)
+            col3, col4 = st.columns(2)
+            col4.metric(':arrow_up:💲Precio máximo de firma (COP/kWh)', round(pron_up, 2))
+            col3.metric(':arrow_down:💲Precio mínimo de firma (COP/kWh)', round(pron_down, 2))
+        
         with tab1.container(key='cont-result-2'):
-            mensaje = '📋 Condiciones del Contrato'
-            st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">{mensaje}</p>', unsafe_allow_html=True)
-            col7,col8 = st.columns([1,1])
-            aportes_g = col7.slider('🌧️ Aportes sobre la media (%)', 0.0, 200.0, 100.0, key='aportes-gra')/100
-            volumen_g = col8.slider('💧⚡ Volumen útil embalses (%)', 0.0, 100.0, 50.0, key='volumen-gra')/100
-            energia_g = col7.number_input("⚡ Energía a contratar por contrato (GWh)",key='precio-input-gra', min_value=0.00,step=0.01,format="%.2f")
-            pBolsa_g = col8.number_input("💲⚡ Precio de bolsa (COP/kWh)",key='pbolsa-input-gra', min_value=0.00,step=0.01,format="%.2f")
-            if energia_g > 0:
-                if pBolsa_g > 0:
-                    st.divider()
-                    st.markdown('<br>', unsafe_allow_html=True)
-                    res_graf = totales(contratos_f2,modelo,t_c,std,energia_g, 1, aportes_g, volumen_g, pBolsa_g)
-                    st.plotly_chart(graficar(res_graf), use_container_width=True)
-                else:
-                    st.warning(":warning:💲 Por favor, ingrese un precio de bolsa válido.")
+            st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📋 Condiciones del Contrato</p>', unsafe_allow_html=True)
+            col7, col8 = st.columns(2)
+            aportes_g = col7.slider('🌧️ Aportes sobre la media (%)', 0.0, 200.0, 100.0, key='aportes-gra') / 100
+            volumen_g = col8.slider('💧⚡ Volumen útil embalses (%)', 0.0, 100.0, 50.0, key='volumen-gra') / 100
+            energia_g = col7.number_input("⚡ Energía a contratar por contrato (GWh)", key='precio-input-gra', min_value=0.00, step=0.01, format="%.2f")
+            pBolsa_g = col8.number_input("💲⚡ Precio de bolsa (COP/kWh)", key='pbolsa-input-gra', min_value=0.00, step=0.01, format="%.2f")
+            if energia_g > 0 and pBolsa_g > 0:
+                st.divider(); st.markdown('<br>', unsafe_allow_html=True)
+                res_graf = totales(contratos_f2, modelo, t_c, std, energia_g, 1, aportes_g, volumen_g, pBolsa_g)
+                st.plotly_chart(graficar(res_graf, dif_MR_MNR(BD_MNR, 'MC', 'Precio Promedio Contratos No Regulados', 36)), use_container_width=True)
             else:
-                st.warning(":warning:⚡ Por favor, ingrese una cantidad de energía a contratar válida.")
+                st.warning(":warning: Ingrese valores válidos para energía y precio de bolsa.")
 
 if __name__ == "__main__":
     main()
