@@ -301,7 +301,7 @@ def main():
 
     st.sidebar.divider()
     st.header("Pronósticos Contratos")
-    #st.sidebar.image("images/LogoVatia.png",caption="",use_container_width=True)
+    st.sidebar.image("images/LogoVatia.png",caption="",use_container_width=True)
     
     # Sección de notificaciones (4 placeholders)
     exp_notif = st.sidebar.container(key="styled_expander").expander("**🚨 Notificaciones**", expanded=True)
