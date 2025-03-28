@@ -50,7 +50,7 @@ def carga_FactorPSI(archivo, _alerta):
     datosPSI = pd.read_csv(archivo, sep=';', header=0, low_memory=False)
     missing_columns = [col for col in required_columns if col not in datosPSI.columns]
     if not missing_columns:
-        _alerta.success(":heavy_check_mark: 💧 Base de datos de hidrología cargada correctamente")
+        _alerta.success("✔️ 💧 Base de datos de hidrología cargada correctamente")
     else:
         return pd.DataFrame()
     return datosPSI
@@ -60,7 +60,7 @@ def carga_MNR(archivo, _alerta):
     datosMNR = pd.read_csv(archivo, sep=';', header=0, low_memory=False)
     missing_columns = [col for col in required_columns if col not in datosMNR.columns]
     if not missing_columns:
-        _alerta.success(":heavy_check_mark: 💲 Base de datos MNR cargada correctamente")
+        _alerta.success("✔️ 💲 Base de datos MNR cargada correctamente")
     else:
         return pd.DataFrame()
     return datosMNR
@@ -76,13 +76,13 @@ def carga_archivos(archivo, nombre, _alerta):
             datos['CONTRATO'] = datos['CONTRATO'].apply(lambda x: str(int(float(x))) if x.endswith('.0') and x.replace('.0', '').isdigit() else x)
             if "kw" in nombre.lower():
                 datos.drop(['TIPO','CODIGO_CONVOCATORIA','CONCEPTO','CODIGO_COMERCIALIZADOR','ADJUDICACION_AÑO'],axis=1, inplace=True)
-                _alerta.success(":heavy_check_mark: :zap: Base de datos de energía cargada correctamente")
+                _alerta.success("✔️ ⚡ Base de datos de energía cargada correctamente")
             if "precios" in nombre.lower():
                 datos.drop(['TIPO','IPP_BASE','PERIODO_BASE','CODIGO_CONVOCATORIA',
                         'CODIGO_COMERCIALIZADOR','CONCEPTO'],axis=1, inplace=True)
-                _alerta.success(":heavy_check_mark: :heavy_dollar_sign: Base de datos de precio cargada correctamente")
+                _alerta.success("✔️ 💲 Base de datos de precio cargada correctamente")
         else:
-            _alerta.warning(f":no_entry: El archivo cargado no es correcto. Faltan las siguientes columnas: {', '.join(missing_columns)}")
+            _alerta.warning(f"⛔ El archivo cargado no es correcto. Faltan las siguientes columnas: {', '.join(missing_columns)}")
             return pd.DataFrame()
 
     else:
@@ -363,7 +363,7 @@ def main():
 
         contratos_f2 = st.session_state['Contratos']
         contenedor = st.container(key='cont-maestro')
-        alpha_lit = contenedor.selectbox(':dart: Rango de Precisión', ['Alto', 'Medio', 'Bajo'], key='alpha-sel')
+        alpha_lit = contenedor.selectbox('🎯 Rango de Precisión', ['Alto', 'Medio', 'Bajo'], key='alpha-sel')
         st.markdown('<br>', unsafe_allow_html=True)
         alpha = 0.9 if alpha_lit == 'Alto' else 0.7 if alpha_lit == 'Medio' else 0.5
         modelo, t_c, std = entrenar(contratos_f2, alpha)
@@ -383,13 +383,13 @@ def main():
                                         columns=['GW_TOTAL','PLAZO','DURACION','APORTES','VOLUMEN_UTIL','PROM_PRECIO_BOLSA'])
                 pron_up, pron_down = pronostico(modelo, df_input, t_c, std)
             else:
-                st.warning(":warning: Ingrese valores válidos para energía y precio de bolsa.")
+                st.warning("⚠️ Ingrese valores válidos para energía y precio de bolsa.")
                 pron_up, pron_down = 0.00, 0.00
             st.divider()
             st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📊 Información: Pronóstico de Contrato</p>', unsafe_allow_html=True)
             col3, col4 = st.columns(2)
-            col4.metric(':arrow_up:💲Precio máximo de firma (COP/kWh)', round(pron_up, 2))
-            col3.metric(':arrow_down:💲Precio mínimo de firma (COP/kWh)', round(pron_down, 2))
+            col4.metric('⬆️💲Precio máximo de firma (COP/kWh)', round(pron_up, 2))
+            col3.metric('⬇️💲Precio mínimo de firma (COP/kWh)', round(pron_down, 2))
         
         with tab1.container(key='cont-result-2'):
             st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📋 Condiciones del Contrato</p>', unsafe_allow_html=True)
@@ -403,7 +403,7 @@ def main():
                 res_graf = totales(contratos_f2, modelo, t_c, std, energia_g, 1, aportes_g, volumen_g, pBolsa_g)
                 st.plotly_chart(graficar(res_graf, dif_MR_MNR(BD_MNR, 'MC', 'Precio Promedio Contratos No Regulados', 36)), use_container_width=True)
             else:
-                st.warning(":warning: Ingrese valores válidos para energía y precio de bolsa.")
+                st.warning("⚠️ Ingrese valores válidos para energía y precio de bolsa.")
 
 if __name__ == "__main__":
     main()
