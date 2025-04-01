@@ -323,10 +323,11 @@ def main():
     estilo()
     color_dinamico = "#aeea00"  # Verde Manzana
     st.sidebar.image("images/LogoVatia.png",caption="",use_container_width=True)
+
     st.sidebar.divider()
     st.header("Pronósticos Contratos")
-    
-    
+
+
     # Sección de notificaciones (4 placeholders)
     exp_notif = st.sidebar.container(key="styled_expander").expander("**🚨 Notificaciones**", expanded=True)
     ph_alerta = [crear_placeholder(exp_notif) for _ in range(4)]
@@ -363,12 +364,12 @@ def main():
     if precios.empty: ph_alerta[1].warning(":warning: Por favor, carga un archivo válido de precios de contrato.")
     BD_PSI = carga_FactorPSI(arch3, ph_alerta[2]) if arch3 else pd.DataFrame()
     if BD_PSI.empty: ph_alerta[2].warning(":warning: Por favor, carga un archivo válido de hidrología.")
-    
-    if arch1 and arch2 and arch3: 
+
+    if arch1 and arch2 and arch3:
       st.session_state.archivo_cargado_MR = True
 
     BD_MNR = limpiar_col_monet(carga_MNR(arch_MNR, ph_alerta[3])) if arch_MNR else pd.DataFrame()
-    if arch_MNR: 
+    if arch_MNR:
       st.session_state.archivo_cargado_MNR = True
 
     if BD_MNR.empty: ph_alerta[3].warning(":warning: Por favor, carga un archivo válido de historicos de MNR.")
@@ -443,7 +444,6 @@ def main():
                     st.plotly_chart(graficar(res_graf, dif_MR_MNR(BD_MNR, 'MC', 'Precio Promedio Contratos No Regulados', 36), x_range=x_range), use_container_width=True)
                 else:
                     st.warning("⚠️ Ingrese valores válidos para energía y precio de bolsa.")
-
 
 if __name__ == "__main__":
     main()
