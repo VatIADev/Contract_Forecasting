@@ -213,7 +213,7 @@ def estilo():
 
             div[data-testid="stMetric"] {
                 background-color: rgba(9, 90, 129, 0.5);
-                border-radius: 20px;         /* Esquinas redondeadas */
+                border-radius: 5px;         /* Esquinas redondeadas */
                 padding: 15px;              /* Añadir algo de padding */
                 color: white;               /* Cambiar color del texto a blanco */
                 font-family: 'Prompt', sans-serif !important;
@@ -242,8 +242,8 @@ def estilo():
 
             .st-key-cont-load, .st-key-cont-result, .st-key-cont-result-2, .st-key-cont-maestro{
                 background-color:#396425ff !important;
-                padding: 1.5em;
-                border-radius: 20px;
+                padding: 20px;
+                border-radius: 5px;
             }
 
             h3, label[data-testid="stMetricLabel"] p{
@@ -293,9 +293,31 @@ def estilo():
             .st-key-styled_expander_2 div[data-testid="stExpanderDetails"] p h1{
                 color: white;
             }
+
+            .st-key-styled_tabs button{
+                width:50%;
+                border-radius:5px;
+            }
+
+            .st-key-styled_tabs button[aria-selected="true"]{
+                background-color:#396425ff;
+                border-radius:5px;
+            }
+
+            .st-key-styled_tabs div[data-baseweb="tab-panel"]{
+                border-radius:5px;
+                padding:10px;
+                background-color:#396425ff;
+            }
+
+            .st-key-styled_tabs{
+                background-color:grey;
+                border-radius:5px;
+            }
+
             </style>
       """, unsafe_allow_html=True)
-
+    
 def main():
     st.set_page_config(page_title="Pronóstico Contratos Vatia", page_icon="images/icon.png", layout="wide")
     estilo()
@@ -369,56 +391,59 @@ def main():
         st.markdown('<br>', unsafe_allow_html=True)
         alpha = 0.9 if alpha_lit == 'Alto' else 0.7 if alpha_lit == 'Medio' else 0.5
         modelo, t_c, std = entrenar(contratos_f2, alpha)
-        tab1, tab2 = st.tabs(["📈 Valoración de Energía por Contratos", "📊 Valoración Precio de Contratos"])
         
-        with tab2.container(key='cont-result'):
-            st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📋 Condiciones del Contrato</p>', unsafe_allow_html=True)
-            col1, col2 = st.columns(2)
-            
-            plazo_ejec = col1.slider('🗓️ Inicio del contrato (Años)', 0, 15, 2, key='plazo_uni')
-            duracion_cu = col2.slider('⏳ Duración (Años)', 0, 15, 1, key='duracion_uni')
-            energia_cu = st.number_input("⚡ Energía a contratar por contrato (GWh)", key='precio_input_uni', min_value=0, step=1, format="%.0d")
-            
-            st.divider()
-            st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📰 Información del Mercado</p>', unsafe_allow_html=True)
-            col3, col4,  = st.columns(2)
-            
-            volumen_cu = col3.slider('💧⚡ Volumen útil embalses (%)', 0, 100, 50, key='volumen_uni') / 100.0
-            aportes_cu = col4.slider('🌧️ Aportes sobre la media (%)', 0, 200, 100, key='aportes-uni') / 100.0
-            pBolsa_cu = st.number_input("💲⚡ Precio de bolsa (COP/kWh)", key='pbolsa_input_uni', min_value=0, step=1, format="%.0d")
+        with st.container(key="styled_tabs"):
+            tab1, tab2 = st.tabs(["📈 Valoración de Energía por Contratos", "📊 Valoración Precio de Contratos"])
 
-            if energia_cu > 0 and pBolsa_cu > 0:
-                df_input = pd.DataFrame([[energia_cu, plazo_ejec, duracion_cu, aportes_cu, volumen_cu, pBolsa_cu]],
-                                        columns=['GW_TOTAL','PLAZO','DURACION','APORTES','VOLUMEN_UTIL','PROM_PRECIO_BOLSA'])
-                pron_up, pron_down = pronostico(modelo, df_input, t_c, std)
-            else:
-                st.warning("⚠️ Ingrese valores válidos para energía y precio de bolsa.")
-                pron_up, pron_down = 0.00, 0.00
-            st.divider()
-            st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📊 Información: Pronóstico de Contrato</p>', unsafe_allow_html=True)
-            col5, col6 = st.columns(2)
-            col5.metric('💲Precio máximo de firma (COP/kWh)', round(pron_up, 2))
-            col6.metric('💲Precio mínimo de firma (COP/kWh)', round(pron_down, 2))
-        
-        with tab1.container(key='cont-result-2'):
-            st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📋 Condiciones del Contrato</p>', unsafe_allow_html=True)        
-            energia_g = st.number_input("⚡ Energía a contratar por contrato (GWh)", key='precio-input-gra', min_value=0, step=1, format="%.0d")
+            with tab2.container(key='cont-result'):
+                st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📋 Condiciones del Contrato</p>', unsafe_allow_html=True)
+                col1, col2 = st.columns(2)
 
-            st.divider()
-            st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📰 Información del Mercado</p>', unsafe_allow_html=True)
-            col6, col7 = st.columns(2)
-            
-            aportes_g = col6.slider('🌧️ Aportes sobre la media (%)', 0, 200, 100, key='aportes-gra') / 100.0
-            volumen_g = col7.slider('💧⚡ Volumen útil embalses (%)', 0, 100, 50, key='volumen-gra') / 100.0
-            pBolsa_g = st.number_input("💲⚡ Precio de bolsa (COP/kWh)", key='pbolsa-input-gra', min_value=0, step=1, format="%.0d")
+                plazo_ejec = col1.slider('🗓️ Inicio del contrato (Años)', 0, 15, 2, key='plazo_uni')
+                duracion_cu = col2.slider('⏳ Duración (Años)', 0, 15, 1, key='duracion_uni')
+                energia_cu = st.number_input("⚡ Energía a contratar por contrato (GWh)", key='precio_input_uni', min_value=0, step=1, format="%.0d")
 
-            if energia_g > 0 and pBolsa_g > 0:
-                st.divider(); st.markdown('<br>', unsafe_allow_html=True)
-                res_graf, año_actual, año_max = totales(contratos_f2, modelo, t_c, std, energia_g, 1, aportes_g, volumen_g, pBolsa_g)
-                x_range = st.slider("↔️ Rango de análisis", año_actual, año_max, (año_actual, año_max), key='x_range_slider')
-                st.plotly_chart(graficar(res_graf, dif_MR_MNR(BD_MNR, 'MC', 'Precio Promedio Contratos No Regulados', 36), x_range=x_range), use_container_width=True)
-            else:
-                st.warning("⚠️ Ingrese valores válidos para energía y precio de bolsa.")
+                st.divider()
+                st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📰 Información del Mercado</p>', unsafe_allow_html=True)
+                col3, col4,  = st.columns(2)
+
+                volumen_cu = col3.slider('💧⚡ Volumen útil embalses (%)', 0, 100, 50, key='volumen_uni') / 100.0
+                aportes_cu = col4.slider('🌧️ Aportes sobre la media (%)', 0, 200, 100, key='aportes-uni') / 100.0
+                pBolsa_cu = st.number_input("💲⚡ Precio de bolsa (COP/kWh)", key='pbolsa_input_uni', min_value=0, step=1, format="%.0d")
+
+                if energia_cu > 0 and pBolsa_cu > 0:
+                    df_input = pd.DataFrame([[energia_cu, plazo_ejec, duracion_cu, aportes_cu, volumen_cu, pBolsa_cu]],
+                                            columns=['GW_TOTAL','PLAZO','DURACION','APORTES','VOLUMEN_UTIL','PROM_PRECIO_BOLSA'])
+                    pron_up, pron_down = pronostico(modelo, df_input, t_c, std)
+                else:
+                    st.warning("⚠️ Ingrese valores válidos para energía y precio de bolsa.")
+                    pron_up, pron_down = 0.00, 0.00
+                st.divider()
+                st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📊 Información: Pronóstico de Contrato</p>', unsafe_allow_html=True)
+                col5, col6 = st.columns(2)
+                col5.metric('💲Precio máximo de firma (COP/kWh)', round(pron_up, 2))
+                col6.metric('💲Precio mínimo de firma (COP/kWh)', round(pron_down, 2))
+
+            with tab1.container(key='cont-result-2'):
+                st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📋 Condiciones del Contrato</p>', unsafe_allow_html=True)
+                energia_g = st.number_input("⚡ Energía a contratar por contrato (GWh)", key='precio-input-gra', min_value=0, step=1, format="%.0d")
+
+                st.divider()
+                st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📰 Información del Mercado</p>', unsafe_allow_html=True)
+                col6, col7 = st.columns(2)
+
+                aportes_g = col6.slider('🌧️ Aportes sobre la media (%)', 0, 200, 100, key='aportes-gra') / 100.0
+                volumen_g = col7.slider('💧⚡ Volumen útil embalses (%)', 0, 100, 50, key='volumen-gra') / 100.0
+                pBolsa_g = st.number_input("💲⚡ Precio de bolsa (COP/kWh)", key='pbolsa-input-gra', min_value=0, step=1, format="%.0d")
+
+                if energia_g > 0 and pBolsa_g > 0:
+                    st.divider(); st.markdown('<br>', unsafe_allow_html=True)
+                    res_graf, año_actual, año_max = totales(contratos_f2, modelo, t_c, std, energia_g, 1, aportes_g, volumen_g, pBolsa_g)
+                    x_range = st.slider("↔️ Rango de análisis", año_actual, año_max, (año_actual, año_max), key='x_range_slider')
+                    st.plotly_chart(graficar(res_graf, dif_MR_MNR(BD_MNR, 'MC', 'Precio Promedio Contratos No Regulados', 36), x_range=x_range), use_container_width=True)
+                else:
+                    st.warning("⚠️ Ingrese valores válidos para energía y precio de bolsa.")
+
 
 if __name__ == "__main__":
     main()
