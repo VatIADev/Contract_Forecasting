@@ -433,8 +433,8 @@ def main():
                 st.write(f'<p style="color:{color_dinamico}; font-size:18px; font-weight:bold">📰 Información del Mercado</p>', unsafe_allow_html=True)
                 col6, col7 = st.columns(2)
 
-                aportes_g = col6.slider('🌧️ Aportes sobre la media (%)', 0, 200, 100, key='aportes-gra') / 100.0
-                volumen_g = col7.slider('💧⚡ Volumen útil embalses (%)', 0, 100, 50, key='volumen-gra') / 100.0
+                volumen_g = col6.slider('💧⚡ Volumen útil embalses (%)', 0, 100, 50, key='volumen-gra') / 100.0
+                aportes_g = col7.slider('🌧️ Aportes sobre la media (%)', 0, 200, 100, key='aportes-gra') / 100.0
                 pBolsa_g = st.number_input("💲⚡ Precio de bolsa (COP/kWh)", key='pbolsa-input-gra', min_value=0, step=1, format="%.0d")
 
                 if energia_g > 0 and pBolsa_g > 0:
