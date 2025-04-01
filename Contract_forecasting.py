@@ -415,7 +415,7 @@ def main():
             if energia_g > 0 and pBolsa_g > 0:
                 st.divider(); st.markdown('<br>', unsafe_allow_html=True)
                 res_graf, año_actual, año_max = totales(contratos_f2, modelo, t_c, std, energia_g, 1, aportes_g, volumen_g, pBolsa_g)
-                x_range = st.slider("Rango de análisis", año_actual, año_max, (año_actual, año_max), key='x_range_slider')
+                x_range = st.slider("↔️ Rango de análisis", año_actual, año_max, (año_actual, año_max), key='x_range_slider')
                 st.plotly_chart(graficar(res_graf, dif_MR_MNR(BD_MNR, 'MC', 'Precio Promedio Contratos No Regulados', 36), x_range=x_range), use_container_width=True)
             else:
                 st.warning("⚠️ Ingrese valores válidos para energía y precio de bolsa.")
