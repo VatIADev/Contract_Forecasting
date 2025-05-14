@@ -101,8 +101,8 @@ def gen_BD_Contratos(kW,precios):
 def unif_BD_contratos(historicos,BD_Carga):
     Contratos_DF_f1 = pd.concat([historicos, BD_Carga], ignore_index=True)
     Contratos_DF_f2 = Contratos_DF_f1[(Contratos_DF_f1['KW'] > 0) & (Contratos_DF_f1['PRECIO'] > 0)]
-    Contratos_DF_f2.loc[:,'FECHA'] = pd.to_datetime(Contratos_DF_f2['FECHA'])
-    Contratos_DF_f2.loc[:,'PERIODO_ADJ'] = pd.to_datetime(Contratos_DF_f2['PERIODO_ADJ'])
+    Contratos_DF_f2.loc[:, 'FECHA1'] = pd.to_datetime(Contratos_DF_f2['FECHA1'], errors='coerce')
+    Contratos_DF_f2.loc[:,'PERIODO_ADJ'] = pd.to_datetime(Contratos_DF_f2['PERIODO_ADJ'], errors='coerce')
     return Contratos_DF_f2
 
 @st.cache_data
